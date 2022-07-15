@@ -14,7 +14,7 @@ SDL_Window* window = NULL;
 //the surface contained by the window
 SDL_Surface* screenSurface = NULL;
 
-//The menu image
+//the menu image
 SDL_Surface* menuImage = NULL;
 
 //Starts up SDL and creates window
@@ -25,6 +25,10 @@ bool loadMedia();
 
 //Frees media and shuts down SDL
 void close();
+
+//Loads individual image (the menu background)
+SDL_Surface* loadSurface(std::string path);
+
 
 bool init() {
 	//Initialization flag
@@ -53,11 +57,11 @@ bool loadMedia() {
 	//Loading success flag
 	bool success = true;
 
-	//Load bitmap image (the menu background)
-	menuImage = SDL_LoadBMP("../images/menu.bmp");
+	//Load menu image
+	menuImage = loadSurface("../images/menu.bmp");
 
 	if (menuImage == NULL) {
-		printf("Unable to load menu image %s! SDL Error: %s\n", "../images/menu.bmp", SDL_GetError());
+		printf("Failed to load menu image!\n");
 		success = false;
 	}
 
@@ -79,6 +83,28 @@ void close() {
 
 	//Quit SDL subsystems
 	SDL_Quit();
+}
+
+SDL_Surface* loadSurface(std::string path) {
+	//The final optimized image
+	SDL_Surface* optimizedSurface = NULL;
+
+	//Load image at specified path
+	SDL_Surface* loadedSurface = SDL_LoadBMP(path.c_str());
+	if (loadedSurface == NULL) {
+		printf("Unable to load image %s! SDL Error: %s\n", path.c_str(), SDL_GetError());
+	} else {
+		//Convert surface to screen format
+		optimizedSurface = SDL_ConvertSurface(loadedSurface, screenSurface->format, 0);
+		if (optimizedSurface == NULL) {
+			printf("Unable to optimize image %s! SDL Error: %s\n", path.c_str(), SDL_GetError());
+		}
+
+		//Get rid of old loaded surface
+		SDL_FreeSurface(loadedSurface);
+	}
+
+	return optimizedSurface;
 }
 
 int main(int argc, char* args[]) {
@@ -110,8 +136,13 @@ int main(int argc, char* args[]) {
 					}
 				}
 
-				//Apply the image
-				SDL_BlitSurface(menuImage, NULL, screenSurface, NULL);
+				//Apply the menu image (stretched)
+				SDL_Rect stretchRect;
+				stretchRect.x = 0;
+				stretchRect.y = 0;
+				stretchRect.w = SCREEN_WIDTH;
+				stretchRect.h = SCREEN_HEIGHT;
+				SDL_BlitScaled(menuImage, NULL, screenSurface, &stretchRect);
 			
 				//Update the surface
 				SDL_UpdateWindowSurface(window);
