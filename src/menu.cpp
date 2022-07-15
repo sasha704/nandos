@@ -1,6 +1,7 @@
 /* Display a "main menu" to the user*/
 
 #include <SDL.h>
+#include <SDL_image.h>
 #include <stdio.h>
 #include <iostream>
 
@@ -45,9 +46,18 @@ bool init() {
 			printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
 			success = false;
 		} else {
-			//Get window surface
-			screenSurface = SDL_GetWindowSurface(window);
+
+			//Initialize PNG loading
+			int imgFlags = IMG_INIT_PNG;
+			if (! (IMG_Init(imgFlags) & imgFlags) ) {
+				printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
+				success = false;
+			} else {
+				//Get window surface
+				screenSurface = SDL_GetWindowSurface(window);
+			}
 		}
+		
 	}
 
 	return success;
@@ -58,7 +68,7 @@ bool loadMedia() {
 	bool success = true;
 
 	//Load menu image
-	menuImage = loadSurface("../images/menu.bmp");
+	menuImage = loadSurface("../images/menu2.png");
 
 	if (menuImage == NULL) {
 		printf("Failed to load menu image!\n");
@@ -83,6 +93,7 @@ void close() {
 
 	//Quit SDL subsystems
 	SDL_Quit();
+	IMG_Quit();
 }
 
 SDL_Surface* loadSurface(std::string path) {
@@ -90,7 +101,8 @@ SDL_Surface* loadSurface(std::string path) {
 	SDL_Surface* optimizedSurface = NULL;
 
 	//Load image at specified path
-	SDL_Surface* loadedSurface = SDL_LoadBMP(path.c_str());
+	SDL_Surface* loadedSurface = IMG_Load(path.c_str());
+	
 	if (loadedSurface == NULL) {
 		printf("Unable to load image %s! SDL Error: %s\n", path.c_str(), SDL_GetError());
 	} else {
