@@ -94,14 +94,28 @@ int main(int argc, char* args[]) {
 		if (!loadMedia()) {
 			printf("Failed to load media!\n");
 		} else {
-			//Apply the image
-			SDL_BlitSurface(menuImage, NULL, screenSurface, NULL);
-			
-			//Update the surface
-			SDL_UpdateWindowSurface(window);
+			//Main loop flag
+			bool quit = false;
 
-			//Wait 4 seconds
-			SDL_Delay(4000);
+			//Event handler
+			SDL_Event e;
+
+			//While application is running
+			while (!quit) {
+				//Handle events on queue
+				while (SDL_PollEvent( &e ) != 0) {
+					//User requests quit
+					if (e.type == SDL_QUIT) {
+						quit = true;
+					}
+				}
+
+				//Apply the image
+				SDL_BlitSurface(menuImage, NULL, screenSurface, NULL);
+			
+				//Update the surface
+				SDL_UpdateWindowSurface(window);
+			}
 		}
 	}
 
