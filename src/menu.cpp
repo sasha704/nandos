@@ -123,11 +123,14 @@ TTF_Font *gFont = NULL;
 //Mouse button sprites
 SDL_Rect gSpriteClips[ BUTTON_SPRITE_TOTAL ];
 
+//global gamestate
+char* gameState = "menu";
+
 //menu sprite textures
-LTexture gButtonSpriteSheetTexture;
+LTexture buttonSpriteSheetTexture;
 
 //menu texture
-LTexture gBackgroundTexture;
+LTexture backgroundTexture;
 
 //Button text
 LTexture quitButtonText;
@@ -368,6 +371,10 @@ void LButton::handleEvent( SDL_Event* e )
 				if (buttonID == "QUIT"){
 					exit(4);
 				}
+
+				if (buttonID == "PLAY"){
+					gameState = "game";
+				}
 				break;
 				
 				case SDL_MOUSEBUTTONUP:
@@ -381,7 +388,7 @@ void LButton::handleEvent( SDL_Event* e )
 void LButton::render()
 {
 	//Show current button sprite
-	gButtonSpriteSheetTexture.render( mPosition.x, mPosition.y, 0, &gSpriteClips[ mCurrentSprite ]);
+	buttonSpriteSheetTexture.render( mPosition.x, mPosition.y, 0, &gSpriteClips[ mCurrentSprite ]);
 }
 
 bool init()
@@ -446,13 +453,12 @@ bool init()
 	return success;
 }
 
-bool loadMedia()
-{
+bool loadMedia() {
 	//Loading success flag
 	bool success = true;
 
 	//Load sprites
-	if( !gButtonSpriteSheetTexture.loadFromFile( "../images/newButton.png" ) )
+	if( !buttonSpriteSheetTexture.loadFromFile( "../images/newButton.png" ) )
 	{
 		printf( "Failed to load button sprite texture!\n" );
 		success = false;
@@ -471,7 +477,7 @@ bool loadMedia()
 		}
 
 		//Load background texture
-		if( !gBackgroundTexture.loadFromFile( "../images/menu.png" ) )
+		if( !backgroundTexture.loadFromFile( "../images/menu.png" ) )
 		{
 			printf( "Failed to load background texture image!\n" );
 			success = false;
@@ -481,6 +487,7 @@ bool loadMedia()
 
 		//Set button positions
 		gButtons[ 0 ].setPosition( 0, 0 );
+		gButtons[0].setID("PLAY");
 		
 		gButtons[ 1 ].setPosition( 0, WINDOW_HEIGHT - ((BUTTON_HEIGHT * 2) + 50) );
 		gButtons[ 2 ].setPosition( 0, WINDOW_HEIGHT - BUTTON_HEIGHT );
@@ -491,17 +498,14 @@ bool loadMedia()
 
 	//Open the font
 	gFont = TTF_OpenFont( "../fonts/SeaweedScript-Regular.ttf", 28 );
-	if( gFont == NULL )
-	{
+	if (gFont == NULL) {
 		printf( "Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError() );
 		success = false;
 	}
-	else
-	{
+	else {
 		//Render text
 		SDL_Color textColor = { 0, 0, 0 };
-		if( !(quitButtonText.loadFromRenderedText( "Quit", textColor ) && loadButtonText.loadFromRenderedText( "Load", textColor ) && playButtonText.loadFromRenderedText( "New Game", textColor )))
-		{
+		if (! (quitButtonText.loadFromRenderedText( "Quit", textColor ) && loadButtonText.loadFromRenderedText( "Load", textColor ) && playButtonText.loadFromRenderedText( "New Game", textColor ))) {
 			printf( "Failed to render text texture!\n" );
 			success = false;
 		}
@@ -513,7 +517,8 @@ bool loadMedia()
 void close()
 {
 	//Free loaded images
-	gButtonSpriteSheetTexture.free();
+	buttonSpriteSheetTexture.free();
+	backgroundTexture.free();
 
 	//Free global font
 	TTF_CloseFont( gFont );
@@ -556,8 +561,9 @@ int main( int argc, char* args[] )
 			SDL_Event e;
 
 			//While application is running
-			while( !quit )
-			{
+			while (!quit) {
+				
+				
 				//Handle events on queue
 				while( SDL_PollEvent( &e ) != 0 )
 				{
@@ -579,19 +585,30 @@ int main( int argc, char* args[] )
 				SDL_RenderClear( renderer );
 
 				//Render background texture to screen
-				gBackgroundTexture.render( 0, 0, 1);
+				backgroundTexture.render( 0, 0, 1);
 
+				if (gameState=="menu") {
+					
+					//Render buttons
+					for( int i = 0; i < TOTAL_BUTTONS; ++i )
+					{
+						gButtons[ i ].render();
+					}
 
-				//Render buttons
-				for( int i = 0; i < TOTAL_BUTTONS; ++i )
-				{
-					gButtons[ i ].render();
+					//Render current frame
+					quitButtonText.render( (0+( (BUTTON_WIDTH - quitButtonText.getWidth() ) / 2)) , (WINDOW_HEIGHT - (( BUTTON_HEIGHT- quitButtonText.getHeight() ) / 2)),0);
+					loadButtonText.render( (0+( (BUTTON_WIDTH - loadButtonText.getWidth() ) / 2)) , (WINDOW_HEIGHT - ((( BUTTON_HEIGHT- loadButtonText.getHeight() ) / 2) + (BUTTON_HEIGHT) + 100)),0 );
+					playButtonText.render( (0+( (BUTTON_WIDTH - playButtonText.getWidth() ) / 2)) , (0 + (( BUTTON_HEIGHT- playButtonText.getHeight() ) / 2)),0 );
+
 				}
 
-				//Render current frame
-				quitButtonText.render( (0+( (BUTTON_WIDTH - quitButtonText.getWidth() ) / 2)) , (WINDOW_HEIGHT - (( BUTTON_HEIGHT- quitButtonText.getHeight() ) / 2)),0);
-				loadButtonText.render( (0+( (BUTTON_WIDTH - loadButtonText.getWidth() ) / 2)) , (WINDOW_HEIGHT - ((( BUTTON_HEIGHT- loadButtonText.getHeight() ) / 2) + (BUTTON_HEIGHT) + 100)),0 );
-				playButtonText.render( (0+( (BUTTON_WIDTH - playButtonText.getWidth() ) / 2)) , (0 + (( BUTTON_HEIGHT- playButtonText.getHeight() ) / 2)),0 );
+				if (gameState == "game") {
+
+				}
+				
+				//if (gameState == "pause"){}
+				//if (gameState == "settings"){}
+				//if (gameState == "load_save"){}
 
 				//Update screen
 				SDL_RenderPresent(renderer);

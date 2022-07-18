@@ -1,8 +1,8 @@
 Bugs: 
-- n/a
+- buttons are only hidden, not removed
 
 Issues:
-- N/A
+- no save/load feature
 
 QOL:
-- N/A
+- buttons dont use drawn images
