@@ -572,7 +572,7 @@ int main( int argc, char* args[] )
 					{
 						quit = true;
 					}
-					
+
 					//Handle button events
 					for( int i = 0; i < TOTAL_BUTTONS; ++i )
 					{
@@ -601,8 +601,14 @@ int main( int argc, char* args[] )
 					playButtonText.render( (0+( (BUTTON_WIDTH - playButtonText.getWidth() ) / 2)) , (0 + (( BUTTON_HEIGHT- playButtonText.getHeight() ) / 2)),0 );
 
 				}
+				else{
+					//set buttons as inactive
+					gButtons[0].setID("INACTIVE");
+					gButtons[2].setID("INACTIVE");
+				}
 
 				if (gameState == "game") {
+
 
 				}
 				
