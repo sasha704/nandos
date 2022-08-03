@@ -24,17 +24,20 @@ class LButton {
 		//Sets top left position
 		void setPosition( int x, int y );
 
+		//get position of top left corner
+		SDL_Point getPos();
+
 		//Handles mouse event
 		char* handleEvent( SDL_Event* e, int BUTTON_WIDTH, int BUTTON_HEIGHT );
-	
-		//Shows button sprite
-		void render(SDL_Renderer* renderer, LTexture buttonSpriteSheetTexture);
 
 		//set the id of a button
 		void setID(char* a);
 
 		//return the id of a button
 		char* getID();
+
+		//get current sprite
+		LButtonSprite getCurrentSprite();
 
 	private:
 		//Top left position
@@ -43,7 +46,7 @@ class LButton {
 		//the id of the button
 		char* buttonID;
 
-		//Currently used global sprite
+		//Currently used sprite
 		LButtonSprite mCurrentSprite;
 
 		//Mouse button sprites

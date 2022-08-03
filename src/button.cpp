@@ -28,12 +28,20 @@ void LButton::setPosition( int x, int y ) {
 	mPosition.y = y;
 }
 
+SDL_Point LButton::getPos(){
+	return mPosition;
+}
+
 void LButton::setID(char* x) {
 	buttonID = x;
 }
 
 char* LButton::getID(){
 	return buttonID;
+}
+
+LButtonSprite LButton::getCurrentSprite(){
+	return mCurrentSprite;
 }
 
 char* LButton::handleEvent( SDL_Event* e, int BUTTON_WIDTH, int BUTTON_HEIGHT ) {
@@ -96,7 +104,3 @@ char* LButton::handleEvent( SDL_Event* e, int BUTTON_WIDTH, int BUTTON_HEIGHT ) 
 	return "play";
 }
 	
-void LButton::render(SDL_Renderer* renderer, LTexture buttonSpriteSheetTexture) {
-	//Show current button sprite
-	buttonSpriteSheetTexture.render( renderer, mPosition.x, mPosition.y, 0, &gSpriteClips[ mCurrentSprite ]);
-}

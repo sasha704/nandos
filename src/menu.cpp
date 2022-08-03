@@ -247,7 +247,21 @@ int main( int argc, char* args[] ) {
 					
 					//Render buttons
 					for( int i = 0; i < TOTAL_BUTTONS; ++i ) {
-						gButtons[ i ].render(renderer, buttonSpriteSheetTexture);
+						//gButtons[ i ].render(renderer, buttonSpriteSheetTexture);
+
+						SDL_Point mPosition = gButtons[i].getPos();
+
+						SDL_Rect gSpriteClips[ BUTTON_SPRITE_TOTAL ];
+
+						//Set sprites
+						for( int i = 0; i < BUTTON_SPRITE_TOTAL; ++i ) {
+							gSpriteClips[ i ].x = 0;
+							gSpriteClips[ i ].y = i * 101;
+							gSpriteClips[ i ].w = 300;
+							gSpriteClips[ i ].h = 100;;
+						}
+
+						buttonSpriteSheetTexture.render( renderer, mPosition.x, mPosition.y, 0, &gSpriteClips[ gButtons[i].getCurrentSprite()]);
 					}
 					
 					
@@ -261,14 +275,13 @@ int main( int argc, char* args[] ) {
 				}
 				else{
 					//set buttons as inactive
-					//gButtons[0].setID("INACTIVE");
-					//gButtons[2].setID("INACTIVE");
-					printf("flag2");
+					gButtons[0].setID("INACTIVE");
+					gButtons[2].setID("INACTIVE");
 				}
 
 				if (gameState == "game") {
 
-					printf("flag1");
+					//printf("flag1");
 
 					//add buttons to screen
 
