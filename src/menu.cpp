@@ -266,9 +266,9 @@ int main( int argc, char* args[] ) {
 					
 
 					//Render current frame
-					quitButtonText.render( renderer, (0+( (BUTTON_WIDTH - quitButtonText.getWidth() ) / 2)) , (WINDOW_HEIGHT - (( BUTTON_HEIGHT- quitButtonText.getHeight() ) / 2)),0);
-					loadButtonText.render( renderer, (0+( (BUTTON_WIDTH - loadButtonText.getWidth() ) / 2)) , (WINDOW_HEIGHT - ((( BUTTON_HEIGHT- loadButtonText.getHeight() ) / 2) + (BUTTON_HEIGHT) + 100)),0 );
-					playButtonText.render( renderer, (0+( (BUTTON_WIDTH - playButtonText.getWidth() ) / 2)) , (0 + (( BUTTON_HEIGHT- playButtonText.getHeight() ) / 2)),0 );
+					quitButtonText.render( renderer, ((BUTTON_WIDTH - quitButtonText.getWidth() ) / 2) , ((WINDOW_HEIGHT - BUTTON_HEIGHT )+ (( BUTTON_HEIGHT- quitButtonText.getHeight() ) / 2)),0);
+					loadButtonText.render( renderer, ((BUTTON_WIDTH - loadButtonText.getWidth() ) / 2) , ((WINDOW_HEIGHT - ((BUTTON_HEIGHT*2) + 50)) + ((( BUTTON_HEIGHT- loadButtonText.getHeight() ) / 2))),0 );
+					playButtonText.render( renderer, ((BUTTON_WIDTH - playButtonText.getWidth() ) / 2) , (( BUTTON_HEIGHT- playButtonText.getHeight() ) / 2),0 );
 
 
 				}
