@@ -17,7 +17,7 @@ LButton::LButton() {
 	//Set sprites
 	for( int i = 0; i < BUTTON_SPRITE_TOTAL; ++i ) {
 		gSpriteClips[ i ].x = 0;
-		gSpriteClips[ i ].y = i * 101;
+		gSpriteClips[ i ].y = i * 1250;
 		gSpriteClips[ i ].w = 300;
 		gSpriteClips[ i ].h = 100;;
 	}
@@ -84,7 +84,6 @@ char* LButton::handleEvent( SDL_Event* e, int BUTTON_WIDTH, int BUTTON_HEIGHT ) 
 				break;
 			
 				case SDL_MOUSEBUTTONDOWN:
-				mCurrentSprite = BUTTON_SPRITE_MOUSE_DOWN;
 				
 				if (strcmp(buttonID,"QUIT")==0) {
 					return "quit";
@@ -96,7 +95,6 @@ char* LButton::handleEvent( SDL_Event* e, int BUTTON_WIDTH, int BUTTON_HEIGHT ) 
 				break;
 				
 				case SDL_MOUSEBUTTONUP:
-				mCurrentSprite = BUTTON_SPRITE_MOUSE_UP;
 				break;
 			}
 		}

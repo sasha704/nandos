@@ -71,6 +71,9 @@ LTexture loadButtonText;
 //Buttons objects
 LButton gButtons[ TOTAL_BUTTONS ]; 
 
+SDL_Rect gSpriteClips[ BUTTON_SPRITE_TOTAL ];
+
+
 //starts up SDL and creates window
 bool init() {
 	//Initialization flag
@@ -130,18 +133,25 @@ bool loadMedia() {
 	bool success = true;
 
 	//Load sprites
-	if ( !buttonSpriteSheetTexture.loadFromFile( renderer, "../images/newButton.png" ) ) {
+	if ( !buttonSpriteSheetTexture.loadFromFile( renderer, "../images/buttons.png" ) ) {
 		printf( "Failed to load button sprite texture!\n" );
 		success = false;
 	}
 	else {
 
 		//Load background texture
-		if( !backgroundTexture.loadFromFile( renderer, "../images/menu.png" ) ) {
+		if( !backgroundTexture.loadFromFile( renderer, "../images/start_screen_nandoos.png" ) ) {
 			printf( "Failed to load background texture image!\n" );
 			success = false;
 		}
 		
+		//Set sprites
+		for( int i = 0; i < BUTTON_SPRITE_TOTAL; ++i ) {
+			gSpriteClips[ i ].x = 0;
+			gSpriteClips[ i ].y = i * 885;
+			gSpriteClips[ i ].w = 1700;
+			gSpriteClips[ i ].h = 885;
+		}
 		
 
 		//Set button positions
@@ -247,21 +257,10 @@ int main( int argc, char* args[] ) {
 					
 					//Render buttons
 					for( int i = 0; i < TOTAL_BUTTONS; ++i ) {
-						//gButtons[ i ].render(renderer, buttonSpriteSheetTexture);
 
 						SDL_Point mPosition = gButtons[i].getPos();
 
-						SDL_Rect gSpriteClips[ BUTTON_SPRITE_TOTAL ];
-
-						//Set sprites
-						for( int i = 0; i < BUTTON_SPRITE_TOTAL; ++i ) {
-							gSpriteClips[ i ].x = 0;
-							gSpriteClips[ i ].y = i * 101;
-							gSpriteClips[ i ].w = 300;
-							gSpriteClips[ i ].h = 100;;
-						}
-
-						buttonSpriteSheetTexture.render( renderer, mPosition.x, mPosition.y, 0, &gSpriteClips[ gButtons[i].getCurrentSprite()]);
+						buttonSpriteSheetTexture.render( renderer, mPosition.x, mPosition.y, 2, &gSpriteClips[ gButtons[i].getCurrentSprite()]);
 					}
 					
 					
