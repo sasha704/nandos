@@ -52,6 +52,10 @@ SDL_Renderer* renderer = NULL;
 //Globally used font
 TTF_Font *gFont = NULL;
 
+//Text colour
+SDL_Color textColour;
+
+
 
 
 //global gamestate
@@ -64,9 +68,13 @@ LTexture buttonSpriteSheetTexture;
 LTexture backgroundTexture;
 
 //Button text
-LTexture quitButtonText;
-LTexture playButtonText;
-LTexture loadButtonText;
+LTexture quitButtonTextDark;
+LTexture playButtonTextDark;
+LTexture loadButtonTextDark;
+
+LTexture quitButtonTextLight;
+LTexture playButtonTextLight;
+LTexture loadButtonTextLight;
 
 //Buttons objects
 LButton gButtons[ TOTAL_BUTTONS ]; 
@@ -172,8 +180,9 @@ bool loadMedia() {
 	}
 	else {
 		//Render text
-		SDL_Color textColor = { 0, 0, 0 };
-		if (! (quitButtonText.loadFromRenderedText( renderer, gFont, "Quit", textColor ) && loadButtonText.loadFromRenderedText( renderer, gFont, "Load", textColor ) && playButtonText.loadFromRenderedText( renderer, gFont, "New Game", textColor ))) {
+		SDL_Color textColorDark = { 0, 0, 0 };
+		SDL_Color textColorLight = { 255, 255, 255 };
+		if (! (quitButtonTextDark.loadFromRenderedText( renderer, gFont, "Quit", textColorDark ) && loadButtonTextDark.loadFromRenderedText( renderer, gFont, "Load", textColorDark ) && playButtonTextDark.loadFromRenderedText( renderer, gFont, "New Game", textColorDark ) && quitButtonTextLight.loadFromRenderedText( renderer, gFont, "Quit", textColorLight ) && loadButtonTextLight.loadFromRenderedText( renderer, gFont, "Load", textColorLight ) && playButtonTextLight.loadFromRenderedText( renderer, gFont, "New Game", textColorLight ))) {
 			printf( "Failed to render text texture!\n" );
 			success = false;
 		}
@@ -263,18 +272,34 @@ int main( int argc, char* args[] ) {
 						buttonSpriteSheetTexture.render( renderer, mPosition.x, mPosition.y, 2, &gSpriteClips[ gButtons[i].getCurrentSprite()]);
 					}
 					
+					//put text on play button
+					if(gButtons[0].getCurrentSprite()==BUTTON_SPRITE_MOUSE_OUT){
+						playButtonTextDark.render( renderer, ((BUTTON_WIDTH - playButtonTextDark.getWidth() ) / 2) , (( BUTTON_HEIGHT- playButtonTextDark.getHeight() ) / 2), 0);
+					}else{
+						playButtonTextLight.render( renderer, ((BUTTON_WIDTH - playButtonTextDark.getWidth() ) / 2) , (( BUTTON_HEIGHT- playButtonTextDark.getHeight() ) / 2), 0);
+
+					}
+
+					//put text on load button
+					if(gButtons[1].getCurrentSprite()==BUTTON_SPRITE_MOUSE_OUT){
+						loadButtonTextDark.render( renderer, ((BUTTON_WIDTH - loadButtonTextDark.getWidth() ) / 2) , ((WINDOW_HEIGHT - ((BUTTON_HEIGHT*2) + 50)) + ((( BUTTON_HEIGHT- loadButtonTextDark.getHeight() ) / 2))), 0);
+					}else{
+						loadButtonTextLight.render( renderer, ((BUTTON_WIDTH - loadButtonTextDark.getWidth() ) / 2) , ((WINDOW_HEIGHT - ((BUTTON_HEIGHT*2) + 50)) + ((( BUTTON_HEIGHT- loadButtonTextDark.getHeight() ) / 2))), 0);
+					}
+
+					//put text on quit button
+					if(gButtons[2].getCurrentSprite()==BUTTON_SPRITE_MOUSE_OUT){
+						quitButtonTextDark.render( renderer, ((BUTTON_WIDTH - quitButtonTextDark.getWidth() ) / 2) , ((WINDOW_HEIGHT - BUTTON_HEIGHT )+ (( BUTTON_HEIGHT- quitButtonTextDark.getHeight() ) / 2)), 0);
+					}else{
+						quitButtonTextLight.render( renderer, ((BUTTON_WIDTH - quitButtonTextDark.getWidth() ) / 2) , ((WINDOW_HEIGHT - BUTTON_HEIGHT )+ (( BUTTON_HEIGHT- quitButtonTextDark.getHeight() ) / 2)), 0);
+					}
 					
-
-					//Render current frame
-					quitButtonText.render( renderer, ((BUTTON_WIDTH - quitButtonText.getWidth() ) / 2) , ((WINDOW_HEIGHT - BUTTON_HEIGHT )+ (( BUTTON_HEIGHT- quitButtonText.getHeight() ) / 2)),0);
-					loadButtonText.render( renderer, ((BUTTON_WIDTH - loadButtonText.getWidth() ) / 2) , ((WINDOW_HEIGHT - ((BUTTON_HEIGHT*2) + 50)) + ((( BUTTON_HEIGHT- loadButtonText.getHeight() ) / 2))),0 );
-					playButtonText.render( renderer, ((BUTTON_WIDTH - playButtonText.getWidth() ) / 2) , (( BUTTON_HEIGHT- playButtonText.getHeight() ) / 2),0 );
-
 
 				}
 				else{
 					//set buttons as inactive
 					gButtons[0].setID("INACTIVE");
+					gButtons[1].setID("INACTIVE");
 					gButtons[2].setID("INACTIVE");
 				}
 
