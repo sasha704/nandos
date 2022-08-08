@@ -1,8 +1,9 @@
 Bugs: 
--
+- inventiry doesn't work
 
 Issues:
 - no save/load feature
+- inventory doesn't use dynamic memory
 
 QOL:
 -

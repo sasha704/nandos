@@ -5,8 +5,8 @@
 #include <stdio.h>
 #include <string>
 #include <cmath>
-//#include "texture.hpp"
 #include "button.hpp"
+#include "gameDataStructures.hpp"
 
 //size of window
 const int WINDOW_WIDTH = 1366;
@@ -20,25 +20,24 @@ const int TOTAL_BUTTONS = 3;
 //so button is clicked, and that moves the game onto the next state
 
 /*
- game state where a->b->c -> (d1||d2)
- d1 -> e1
- d2 -> e2
+ game state contains the current data, the game changes this into what should be shown
 
  game state:
- - location
- - action moment/ disalogue moment
- - options/ diaglogue
- - characters on screen and sprites used for them
+ - type of screen being shown (menu, choice, game, load/save)
 
- greater game state:
- - which menu is being shown/if the game is running
+ menu = ["menu", [gameData]]
+ choice = ["choice", "choice text", [options], [gameData]]
+ game = ["game", [gameData]] 
+ load/save = ["loadSave", [gameData]]
 
+ gameData = ["location", "date", "time", "name", [affection levels], [inventory], [switches]]
+ (switches originally all set to false but can be changed via player choices)
 
 */
 
 
-
-
+//global gamestate
+GameState gameState = GameState();
 
 
 
@@ -54,12 +53,6 @@ TTF_Font *gFont = NULL;
 
 //Text colour
 SDL_Color textColour;
-
-
-
-
-//global gamestate
-char* gameState = "menu";
 
 //menu sprite textures
 LTexture buttonSpriteSheetTexture;
@@ -229,6 +222,8 @@ int main( int argc, char* args[] ) {
 			//Main loop flag
 			bool quit = false;
 
+			gameState.openMenu();
+
 			//Event handler
 			SDL_Event e;
 
@@ -239,7 +234,7 @@ int main( int argc, char* args[] ) {
 				//Handle events on queue
 				while( SDL_PollEvent( &e ) != 0 ) {
 					//User requests quit
-					if ((e.type == SDL_QUIT) || (strcmp(gameState,"quit")==0)) {
+					if ((e.type == SDL_QUIT) || (strcmp(gameState.getState(),"quit")==0)) {
 						quit = true;
 					}
 
@@ -248,7 +243,7 @@ int main( int argc, char* args[] ) {
 						char* result = gButtons[ i ].handleEvent( &e, BUTTON_WIDTH, BUTTON_HEIGHT);
 
 						if(strcmp(result,"play")!=0){
-							gameState = result;
+							gameState.setState(result);
 							
 						}
 					}
@@ -262,7 +257,7 @@ int main( int argc, char* args[] ) {
 				backgroundTexture.render( renderer, 0, 0, 1);
 				
 
-				if (strcmp(gameState, "menu") == 0) {
+				if (strcmp(gameState.getState(), "menu") == 0) {
 					
 					//Render buttons
 					for( int i = 0; i < TOTAL_BUTTONS; ++i ) {
@@ -303,7 +298,7 @@ int main( int argc, char* args[] ) {
 					gButtons[2].setID("INACTIVE");
 				}
 
-				if (gameState == "game") {
+				if (strcmp(gameState.getState(), "game")==0) {
 
 					//printf("flag1");
 
