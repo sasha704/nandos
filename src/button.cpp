@@ -90,6 +90,8 @@ char* LButton::handleEvent( SDL_Event* e, int BUTTON_WIDTH, int BUTTON_HEIGHT ) 
 				}else if (strcmp(buttonID,"PLAY")==0){
 					return "game";
 
+				}else if (strcmp(buttonID,"SAVELOAD")==0){
+					return "saveLoad";
 				}
 				
 				break;

@@ -1,3 +1,5 @@
+/*THE GAME*/
+
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
@@ -8,6 +10,8 @@
 #include "button.hpp"
 #include "gameDataStructures.hpp"
 
+//-------------------CONSTANTS:-------------------
+
 //size of window
 const int WINDOW_WIDTH = 1366;
 const int WINDOW_HEIGHT = 768;
@@ -17,30 +21,10 @@ const int BUTTON_WIDTH = 300;
 const int BUTTON_HEIGHT = 100;
 const int TOTAL_BUTTONS = 3;
 
-//so button is clicked, and that moves the game onto the next state
-
-/*
- game state contains the current data, the game changes this into what should be shown
-
- game state:
- - type of screen being shown (menu, choice, game, load/save)
-
- menu = ["menu", [gameData]]
- choice = ["choice", "choice text", [options], [gameData]]
- game = ["game", [gameData]] 
- load/save = ["loadSave", [gameData]]
-
- gameData = ["location", "date", "time", "name", [affection levels], [inventory], [switches]]
- (switches originally all set to false but can be changed via player choices)
-
-*/
-
+//-----------------GLOBAL VARIABLES:---------------
 
 //global gamestate
 GameState gameState = GameState();
-
-
-
 
 //The window we'll be rendering to
 SDL_Window* window = NULL;
@@ -51,28 +35,36 @@ SDL_Renderer* renderer = NULL;
 //Globally used font
 TTF_Font *gFont = NULL;
 
-//Text colour
-SDL_Color textColour;
+//Buttons objects
+LButton gButtons[ TOTAL_BUTTONS ]; 
+SDL_Rect gSpriteClips[ BUTTON_SPRITE_TOTAL ];
+
+//--------------------BUTTON TEXTURES:-------------------
+
 
 //menu sprite textures
 LTexture buttonSpriteSheetTexture;
 
+
+//---------------BACKGROUNDS:----------------------------
+
 //menu texture
 LTexture backgroundTexture;
 
-//Button text
+
+//--------------BUTTON TEXT:--------------------------------
+
+//darktext
 LTexture quitButtonTextDark;
 LTexture playButtonTextDark;
 LTexture loadButtonTextDark;
 
+//lighttext
 LTexture quitButtonTextLight;
 LTexture playButtonTextLight;
 LTexture loadButtonTextLight;
 
-//Buttons objects
-LButton gButtons[ TOTAL_BUTTONS ]; 
-
-SDL_Rect gSpriteClips[ BUTTON_SPRITE_TOTAL ];
+//-----------------METHODS:----------------------------------
 
 
 //starts up SDL and creates window
@@ -159,8 +151,10 @@ bool loadMedia() {
 		gButtons[0].setPosition( 0, 0 );
 		gButtons[0].setID("PLAY");
 		
-		gButtons[ 1 ].setPosition( 0, WINDOW_HEIGHT - ((BUTTON_HEIGHT * 2) + 50) );
-		gButtons[ 2 ].setPosition( 0, WINDOW_HEIGHT - BUTTON_HEIGHT );
+		gButtons[1].setPosition( 0, WINDOW_HEIGHT - ((BUTTON_HEIGHT * 2) + 50) );
+		gButtons[1].setID("SAVELOAD");
+
+		gButtons[2].setPosition( 0, WINDOW_HEIGHT - BUTTON_HEIGHT );
 		gButtons[2].setID("QUIT");
 
 	}
@@ -207,6 +201,8 @@ void close() {
 	
 }
 
+
+//----------------MAIN GAME LOOP:-------------------------------
 
 int main( int argc, char* args[] ) {
 	//Start up SDL and create window
@@ -312,9 +308,9 @@ int main( int argc, char* args[] ) {
 
 				}
 				
-				//if (gameState == "pause"){}
-				//if (gameState == "settings"){}
-				//if (gameState == "load_save"){}
+				if (strcmp(gameState.getState(), "loadSave")==0){
+
+				}
 
 				//Update screen
 				SDL_RenderPresent(renderer);
