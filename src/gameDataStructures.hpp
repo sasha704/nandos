@@ -1,46 +1,38 @@
 #include <iostream>
 #include <string>
-
-class Storage {
-    public:
-        //create instance of storage
-        Storage();
-
-    private:
-        char* items = NULL;
-};
+#include "Storage.hpp"
+using namespace std;
 
 class GameData {
     public:
         //initialise gameData
         GameData();
 
+        //convert game data to a string
+        string data2String();
+
+        void setName(string newname);
+        void setLocation(string newlocation);
+        void setDate(string newdate);
+        void setTime(string newtime);
+        void setAffection(float newAffectionLevels[]);
+        void setSwitches(int newSwitches[]);
+        void setInventory(char* inventoryList);
+
     private:
-        char* location;
-        char* date;
-        char* time;
-        char* name;
+        string location;
+        string date;
+        string time;
+        string name;
         float* affectionLevels = new float[6];
         Storage inventory;
-        bool* switches = new bool[1];
+        int* switches = new int[1];
 };
 
 class GameState {
     public:
         //initialise game state
         GameState();
-
-        //change the gameState to menu
-        void openMenu();
-        
-        //change the gameState to game
-        void openGame();
-
-        //change the gameState to choice
-        void openChoice(char choices[]);
-
-        //change the gameState to load/save
-        void openLoadSave();
 
         //update the gameData
         void updateGameData(GameData update);
@@ -49,15 +41,18 @@ class GameState {
         GameData getGameData();
 
         //get the current state
-        char* getState();
+        string getState();
 
-        //change the state to quit
-        void quitGame();
+        //change the state
+        void setState(string state);
 
-        void setState(char* state);
+        //convert to string for saving
+        string gameStateToString();
+
+        void setTypeData(string* newTypeData);
 
     private:
-        char* type;
+        string type;
         char* typeData = NULL;
         GameData currentGameData;
 };

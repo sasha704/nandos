@@ -9,6 +9,13 @@
 #include <cmath>
 #include "button.hpp"
 #include "gameDataStructures.hpp"
+#include <fstream>
+#include <string>
+#include <vector>
+#include <sstream>
+
+using namespace std;
+
 
 //-------------------CONSTANTS:-------------------
 
@@ -41,16 +48,13 @@ SDL_Rect gSpriteClips[ BUTTON_SPRITE_TOTAL ];
 
 //--------------------BUTTON TEXTURES:-------------------
 
-
 //menu sprite textures
 LTexture buttonSpriteSheetTexture;
-
 
 //---------------BACKGROUNDS:----------------------------
 
 //menu texture
 LTexture backgroundTexture;
-
 
 //--------------BUTTON TEXT:--------------------------------
 
@@ -201,6 +205,72 @@ void close() {
 	
 }
 
+//save a game to save1.txt
+void saveGame() {
+	// Create and open a text file
+	ofstream MyFile("../saves/save1.txt");
+
+	// Write to the file
+	MyFile << gameState.gameStateToString();
+
+	// Close the file
+	MyFile.close();
+}
+
+//takes in a string and converts it to a gameState object
+void loadState(string saveData){
+	//
+	
+
+	std::stringstream test (saveData);
+	std::string segment;
+	std::vector<std::string> seglist;
+
+	while(std::getline(test, segment, ','))
+	{
+		seglist.push_back(segment);
+	}
+
+	
+	for (string i: seglist) {
+		std::cout << i << ' ';
+	}
+
+	gameState.getGameData().setName(seglist[0]);
+	gameState.getGameData().setLocation(seglist[1]);
+	gameState.getGameData().setDate(seglist[2]);
+	gameState.getGameData().setTime(seglist[3]);
+
+	//gameState.getGameData().setAffection(seglist[4]);
+
+	//gameState.getGameData().setSwitches(seglist[5]);
+
+	//gameState.getGameData().setInventory(seglist[6]);
+
+	gameState.setState(seglist[7]);
+
+	//gameState.setTypeData(seglist[8]);
+}
+
+//load the game in save1.txt
+void loadGame() {
+	string saveData;
+
+	// Read from the text file
+	ifstream MyReadFile("../saves/save1.txt");
+
+	// Use a while loop together with the getline() function to read the file line by line
+	while (getline (MyReadFile, saveData)) {
+		// Output the text from the file
+		loadState(saveData);
+	}
+
+	// Close the file
+	MyReadFile.close();
+
+}
+
+
 
 //----------------MAIN GAME LOOP:-------------------------------
 
@@ -218,8 +288,6 @@ int main( int argc, char* args[] ) {
 			//Main loop flag
 			bool quit = false;
 
-			gameState.openMenu();
-
 			//Event handler
 			SDL_Event e;
 
@@ -230,8 +298,11 @@ int main( int argc, char* args[] ) {
 				//Handle events on queue
 				while( SDL_PollEvent( &e ) != 0 ) {
 					//User requests quit
-					if ((e.type == SDL_QUIT) || (strcmp(gameState.getState(),"quit")==0)) {
+					if ((e.type == SDL_QUIT) || (gameState.getState().compare("quit")==0)) {
 						quit = true;
+						//std::cout << gameState.gameStateToString() << "\n";
+						loadGame();
+						
 					}
 
 					//Handle button events
@@ -253,7 +324,7 @@ int main( int argc, char* args[] ) {
 				backgroundTexture.render( renderer, 0, 0, 1);
 				
 
-				if (strcmp(gameState.getState(), "menu") == 0) {
+				if (gameState.getState().compare("menu") == 0) {
 					
 					//Render buttons
 					for( int i = 0; i < TOTAL_BUTTONS; ++i ) {
@@ -294,7 +365,7 @@ int main( int argc, char* args[] ) {
 					gButtons[2].setID("INACTIVE");
 				}
 
-				if (strcmp(gameState.getState(), "game")==0) {
+				if (gameState.getState().compare("game")==0) {
 
 					//printf("flag1");
 
@@ -308,8 +379,22 @@ int main( int argc, char* args[] ) {
 
 				}
 				
-				if (strcmp(gameState.getState(), "loadSave")==0){
+				if (gameState.getState().compare("loadSave")==0){
+					//read all 3 files as strings
 
+					//interpret string as 
+					
+					
+					//show the load/save screen
+					
+					//list all files in the saves folder
+
+					//allow user to select one to load
+
+					//open and read save files
+
+
+					//list names on screen
 				}
 
 				//Update screen
