@@ -31,7 +31,7 @@ const int TOTAL_BUTTONS = 3;
 //-----------------GLOBAL VARIABLES:---------------
 
 //global gamestate
-GameState gameState = GameState();
+GameState gameState;
 
 //The window we'll be rendering to
 SDL_Window* window = NULL;
@@ -217,10 +217,21 @@ void saveGame() {
 	MyFile.close();
 }
 
+std::vector<std::string> splitList(string list){
+	std::stringstream test (list);
+	std::string segment;
+	std::vector<std::string> seglist;
+
+	while(std::getline(test, segment, '-'))
+	{
+		seglist.push_back(segment);
+	}
+
+	return seglist;
+}
+
 //takes in a string and converts it to a gameState object
 void loadState(string saveData){
-	//
-	
 
 	std::stringstream test (saveData);
 	std::string segment;
@@ -231,25 +242,16 @@ void loadState(string saveData){
 		seglist.push_back(segment);
 	}
 
-	
-	for (string i: seglist) {
-		std::cout << i << ' ';
-	}
+	gameState.setName(seglist[0]);
+	gameState.setLocation(seglist[1]);
+	gameState.setDate(seglist[2]);
+	gameState.setTime(seglist[3]);
+	gameState.setAffection(splitList(seglist[4]));
+	gameState.setSwitches(splitList(seglist[5]));
 
-	gameState.getGameData().setName(seglist[0]);
-	gameState.getGameData().setLocation(seglist[1]);
-	gameState.getGameData().setDate(seglist[2]);
-	gameState.getGameData().setTime(seglist[3]);
-
-	//gameState.getGameData().setAffection(seglist[4]);
-
-	//gameState.getGameData().setSwitches(seglist[5]);
-
-	//gameState.getGameData().setInventory(seglist[6]);
-
+	gameState.setInventory(splitList(seglist[6]));
 	gameState.setState(seglist[7]);
-
-	//gameState.setTypeData(seglist[8]);
+	gameState.setTypeData(splitList(seglist[8]));
 }
 
 //load the game in save1.txt
@@ -301,7 +303,9 @@ int main( int argc, char* args[] ) {
 					if ((e.type == SDL_QUIT) || (gameState.getState().compare("quit")==0)) {
 						quit = true;
 						//std::cout << gameState.gameStateToString() << "\n";
+						//saveGame();
 						loadGame();
+						std::cout << gameState.getGameData().getName() << "\n";
 						
 					}
 

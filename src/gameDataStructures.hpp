@@ -1,6 +1,9 @@
 #include <iostream>
 #include <string>
 #include "Storage.hpp"
+#include <string>
+#include <vector>
+#include <sstream>
 using namespace std;
 
 class GameData {
@@ -15,18 +18,20 @@ class GameData {
         void setLocation(string newlocation);
         void setDate(string newdate);
         void setTime(string newtime);
-        void setAffection(float newAffectionLevels[]);
-        void setSwitches(int newSwitches[]);
-        void setInventory(char* inventoryList);
+        void setAffection(std::vector<std::string> newAffectionLevels);
+        void setSwitches(std::vector<std::string>  newSwitches);
+        void setInventory(std::vector<std::string> inventoryList);
+
+        string getName();
 
     private:
         string location;
         string date;
         string time;
         string name;
-        float* affectionLevels = new float[6];
+        float* affectionLevels;
         Storage inventory;
-        int* switches = new int[1];
+        int* switches;
 };
 
 class GameState {
@@ -49,10 +54,31 @@ class GameState {
         //convert to string for saving
         string gameStateToString();
 
-        void setTypeData(string* newTypeData);
+        void setTypeData(std::vector<std::string> newTypeData);
+
+        //change the name within the game data
+        void setName(string name);
+
+        //change the location within the game data
+        void setLocation(string location);
+
+        //change the date
+        void setDate(string date);
+
+        //change the time
+        void setTime(string time);
+
+        //change the affection
+        void setAffection(std::vector<std::string> affection);
+
+        //change the switches
+        void setSwitches(std::vector<std::string> switches);
+
+        //change the inventory
+        void setInventory(std::vector<std::string> items);
 
     private:
         string type;
-        char* typeData = NULL;
+        string typeData [4];
         GameData currentGameData;
 };

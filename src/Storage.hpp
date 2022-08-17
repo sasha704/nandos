@@ -1,5 +1,8 @@
 #include <iostream>
 #include <string>
+#include <string>
+#include <vector>
+#include <sstream>
 using namespace std;
 
 class Storage {
@@ -10,7 +13,13 @@ class Storage {
         //convert list of objects to string
         string convertStorage();
 
+        //set the items in a storage object
+        void setItems(std::vector<std::string> itemList);
+
+        //add an item to the storage
+        void addItem(string item);
+
     private:
-        char* items = NULL;
+        std::vector<std::string> items;
         int size;
 };

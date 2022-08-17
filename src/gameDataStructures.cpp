@@ -54,19 +54,24 @@ void GameData::setTime(string newtime){
     time = newtime;
 }
 
-//UNFINISHED
-void GameData::setAffection(float newAffectionLevels[]){
-    affectionLevels = newAffectionLevels;
+void GameData::setAffection(std::vector<std::string> newAffectionLevels){
+    for (int i = 0; i< NO_OF_DATES;  i++){
+        affectionLevels[i] = std::stof(newAffectionLevels[i]);
+    }
 }
 
-//UNFINISHED
-void GameData::setSwitches(int newSwitches[]){
-    switches = newSwitches;
+void GameData::setSwitches(std::vector<std::string> newSwitches){
+    for (int i = 0; i< NO_OF_SWITCHES;  i++){
+        switches[i] = stoi(newSwitches[i]);
+    }
 }
 
-//UNFINISHED
-void GameData::setInventory(char* inventoryList){
-    //add items to inventory (Storage object)
+void GameData::setInventory(std::vector<std::string> inventoryList){
+    inventory.setItems(inventoryList);
+}
+
+string GameData::getName(){
+    return name;
 }
 
 
@@ -118,7 +123,6 @@ string GameData::data2String(){
 GameState::GameState(){
     //initialise
     type = "menu";
-    typeData = new char[0];
     currentGameData = GameData();
 }
 
@@ -138,14 +142,52 @@ void GameState::setState(string state){
     type = state;
 }
 
-//UNFINISHED
-string convertTypeData(string typeData){
-    return "";
+void GameState::setName(string name){
+    currentGameData.setName(name);
 }
 
-//UNFINISHED
-void GameState::setTypeData(string* newTypeData){
+void GameState::setLocation(string location){
+    currentGameData.setLocation(location);
+}
 
+void GameState::setDate(string date){
+    currentGameData.setDate(date);
+}
+
+void GameState::setTime(string time){
+    currentGameData.setTime(time);
+}
+
+void GameState::setAffection(std::vector<std::string> affection){
+    currentGameData.setAffection(affection);
+}
+
+void GameState::setSwitches(std::vector<std::string> switches){
+    currentGameData.setSwitches(switches);
+}
+
+void GameState::setInventory(std::vector<std::string> items){
+    currentGameData.setInventory(items);
+}
+
+string convertTypeData(string typeData[]){
+    string stringData = "";
+    
+    for(int i = 0; i < 3; i++){
+        stringData += typeData[i];
+        stringData += "-";
+    }
+
+    stringData += typeData[4];
+
+    return stringData;
+}
+
+void GameState::setTypeData(std::vector<std::string> newTypeData){
+    for (int i = 0; i < 4; i++){
+        typeData[i] = newTypeData[i];
+    }
+    
 }
 
 string GameState::gameStateToString(){

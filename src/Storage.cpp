@@ -24,3 +24,15 @@ string Storage::convertStorage(){
 
     return stringStorage;
 }
+
+void Storage::setItems(std::vector<std::string> itemList){
+    	
+	for (string i: itemList) {
+		addItem(i);
+	}
+}
+
+void Storage::addItem(string item){
+    items.push_back(item);
+}
+
