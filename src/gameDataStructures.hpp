@@ -23,6 +23,8 @@ class GameData {
         void setInventory(std::vector<std::string> inventoryList);
 
         string getName();
+        string getLocation();
+        string getDate();
 
     private:
         string location;

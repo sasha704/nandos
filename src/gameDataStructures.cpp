@@ -74,6 +74,14 @@ string GameData::getName(){
     return name;
 }
 
+string GameData::getLocation(){
+    return location;
+}
+
+string GameData::getDate(){
+    return date;
+}
+
 
 string convertSwitches(int switches[]){
     string stringSwitches = "";

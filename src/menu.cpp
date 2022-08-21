@@ -156,7 +156,7 @@ bool loadMedia() {
 		gButtons[0].setID("PLAY");
 		
 		gButtons[1].setPosition( 0, WINDOW_HEIGHT - ((BUTTON_HEIGHT * 2) + 50) );
-		gButtons[1].setID("SAVELOAD");
+		gButtons[1].setID("LOAD");
 
 		gButtons[2].setPosition( 0, WINDOW_HEIGHT - BUTTON_HEIGHT );
 		gButtons[2].setID("QUIT");
@@ -204,6 +204,9 @@ void close() {
 	SDL_Quit();
 	
 }
+
+//-------------SAVE AND LOAD FUNCTIONS:------------------
+
 
 //save a game to save1.txt
 void saveGame() {
@@ -254,12 +257,19 @@ void loadState(string saveData){
 	gameState.setTypeData(splitList(seglist[8]));
 }
 
-//load the game in save1.txt
-void loadGame() {
+//load the game in a specified save file
+void loadGame(int save) {
 	string saveData;
+	string fileName = "../saves/save1.txt";
+
+	if(save==2){
+		fileName = "../saves/save2.txt";
+	}else if(save==3){
+		fileName = "../saves/save3.txt";
+	}
 
 	// Read from the text file
-	ifstream MyReadFile("../saves/save1.txt");
+	ifstream MyReadFile(fileName);
 
 	// Use a while loop together with the getline() function to read the file line by line
 	while (getline (MyReadFile, saveData)) {
@@ -272,6 +282,22 @@ void loadGame() {
 
 }
 
+LTexture getSaveData(int save){
+	LTexture savedata;
+	loadGame(save);
+	gameState.setState("load");
+
+	string saveDataString = "Name: " + gameState.getGameData().getName() +" Location: "+gameState.getGameData().getLocation()+"Day: "+gameState.getGameData().getDate();
+
+	//Render text
+	SDL_Color textColorLight = { 255, 255, 255 };
+	if (! (savedata.loadFromRenderedText( renderer, gFont, saveDataString, textColorLight ))){
+		printf( "Failed to render text texture!\n" );
+	}
+
+	return savedata;
+	
+}
 
 //----------------PLOT CALCULATION METHODS:----------------------
 
@@ -481,26 +507,101 @@ int main( int argc, char* args[] ) {
 
 				}
 
-				if (gameState.getState().compare("choices")==0) {
+				else if (gameState.getState().compare("choices")==0) {
 					//load choices
 				}
 				
-				if (gameState.getState().compare("loadSave")==0){
-					//read all 3 files as strings
+				else if (gameState.getState().compare("load")==0){
+					//show background
+					backgroundTexture.render( renderer, 0, 0, 1);
 
-					//interpret string as 
+					//show 3 rectangles
+
+					SDL_Rect saveRect;
+					saveRect.x = (WINDOW_WIDTH-800)/2;
+					saveRect.y = (WINDOW_HEIGHT-200);
+					saveRect.w = 800;
+					saveRect.h = 200;
+					SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+
+					SDL_RenderFillRect(renderer, &saveRect);
+					saveRect.y = (WINDOW_HEIGHT/3);
+					SDL_RenderFillRect(renderer, &saveRect);
+					saveRect.y = 0;
+					SDL_RenderFillRect(renderer, &saveRect);
+
+
+					//set up save buttons
+					gButtons[0].setPosition( 0, 0 );
+					gButtons[0].setID("SAVE1");
 					
+					gButtons[1].setPosition( 0, (WINDOW_HEIGHT/3) );
+					gButtons[1].setID("SAVE2");
+
+					gButtons[2].setPosition( 0, WINDOW_HEIGHT - BUTTON_HEIGHT );
+					gButtons[2].setID("SAVE3");
+
+
+					//Render buttons
+					for( int i = 0; i < TOTAL_BUTTONS; ++i ) {
+
+						SDL_Point mPosition = gButtons[i].getPos();
+
+						buttonSpriteSheetTexture.render( renderer, mPosition.x, mPosition.y, 2, &gSpriteClips[ gButtons[i].getCurrentSprite()]);
+					}
+
+
+					//get text for saves
+					LTexture savedata1 = getSaveData(1);
+					LTexture savedata2 = getSaveData(2);
+					LTexture savedata3 = getSaveData(3);
+
+					//display text
+					savedata1.render( renderer, ((WINDOW_WIDTH-800)/2) , 0, 0);
+					savedata2.render( renderer, ((WINDOW_WIDTH-800)/2) , (WINDOW_HEIGHT/3), 0);
+					savedata3.render( renderer, ((WINDOW_WIDTH-800)/2) , (WINDOW_HEIGHT-200), 0);
+
+					//render button text
+					//light
+					LTexture lightLoad;
+					SDL_Color textColorDark = { 0, 0, 0 };
+					SDL_Color textColorLight = { 255, 255, 255 };
+
+					if (! (lightLoad.loadFromRenderedText( renderer, gFont, "Load", textColorLight ))){
+						printf( "Failed to render text texture!\n" );
+					}
+
+					//dark
+					LTexture darkLoad;
+
+					if (! (darkLoad.loadFromRenderedText( renderer, gFont, "Load", textColorDark))){
+						printf( "Failed to render text texture!\n" );
+					}
+
+					//display text
 					
-					//show the load/save screen
-					
-					//list all files in the saves folder
 
-					//allow user to select one to load
+					for( int i = 0; i < TOTAL_BUTTONS; ++i ) {
 
-					//open and read save files
+						SDL_Point mPosition = gButtons[i].getPos();
+						if(gButtons[i].getCurrentSprite()==BUTTON_SPRITE_MOUSE_OUT){
+							darkLoad.render( renderer, mPosition.x, mPosition.y, 0);
+						}else{
+							lightLoad.render( renderer, mPosition.x, mPosition.y, 0);
+						}
+
+						
+					}
 
 
-					//list names on screen
+
+
+				}else if (gameState.getState().compare("save1")==0){
+					loadGame(1);
+				}else if (gameState.getState().compare("save1")==0){
+					loadGame(2);
+				}else if (gameState.getState().compare("save1")==0){
+					loadGame(3);
 				}
 
 				//Update screen
