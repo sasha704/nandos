@@ -447,21 +447,19 @@ int main( int argc, char* args[] ) {
 					//add dialogue on screen:
 
 					//display box on screen
-					
-					SDL_Rect rect;
-					rect.x = 250;
-					rect.y = 150;
-					rect.w = 200;
-					rect.h = 200;
-
-					SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-					SDL_RenderFillRect(renderer, &rect);
+					SDL_Rect dialogueRect;
+					dialogueRect.x = (WINDOW_WIDTH-800)/2;
+					dialogueRect.y = (WINDOW_HEIGHT-200);
+					dialogueRect.w = 800;
+					dialogueRect.h = 200;
+					SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+					SDL_RenderFillRect(renderer, &dialogueRect);
 
 					//get text to display
 					LTexture dialogueText = getText(0,0,"kitchen");
 
 					//display text
-					dialogueText.render( renderer, 0 , 0, 0);
+					dialogueText.render( renderer, ((WINDOW_WIDTH-800)/2) , (WINDOW_HEIGHT-200), 0);
 
 
 
