@@ -166,7 +166,7 @@ bool loadMedia() {
 	//Open the font
 	gFont = TTF_OpenFont( "../fonts/SeaweedScript-Regular.ttf", 28 );
 	if (gFont == NULL) {
-		printf( "Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError() );
+		printf( "Failed to load seaweed font! SDL_ttf Error: %s\n", TTF_GetError() );
 		success = false;
 	}
 	else {
@@ -273,6 +273,39 @@ void loadGame() {
 }
 
 
+//----------------PLOT CALCULATION METHODS:----------------------
+
+//return a texture of the text that should be on screen
+//UNFINISHED
+LTexture getText(int date, int time, string location){
+	LTexture dialogueTexture;
+	string dialogueText = "";
+
+	//intro scene
+	if(date==0){
+		if(time==0){
+			dialogueText = "this is example dialogue";
+		}
+	}
+
+	//day 1
+	if(date==1){
+		if(time==0){
+
+		}
+	}
+
+	
+	//Render text
+	SDL_Color textColorDark = { 0, 0, 0 };
+	SDL_Color textColorLight = { 255, 255, 255 };
+	if (! (dialogueTexture.loadFromRenderedText( renderer, gFont, dialogueText, textColorDark ))){
+		printf( "Failed to render text texture!\n" );
+	}
+
+	return dialogueTexture;
+	
+}
 
 //----------------MAIN GAME LOOP:-------------------------------
 
@@ -304,8 +337,8 @@ int main( int argc, char* args[] ) {
 						quit = true;
 						//std::cout << gameState.gameStateToString() << "\n";
 						//saveGame();
-						loadGame();
-						std::cout << gameState.getGameData().getName() << "\n";
+						//loadGame();
+						//std::cout << gameState.getGameData().getName() << "\n";
 						
 					}
 
@@ -324,11 +357,13 @@ int main( int argc, char* args[] ) {
 				SDL_SetRenderDrawColor( renderer, 0xFF, 0xFF, 0xFF, 0xFF );
 				SDL_RenderClear( renderer );
 
-				//Render background texture to screen
-				backgroundTexture.render( renderer, 0, 0, 1);
+				
 				
 
 				if (gameState.getState().compare("menu") == 0) {
+
+					//Render background texture to screen
+					backgroundTexture.render( renderer, 0, 0, 1);
 					
 					//Render buttons
 					for( int i = 0; i < TOTAL_BUTTONS; ++i ) {
@@ -371,16 +406,85 @@ int main( int argc, char* args[] ) {
 
 				if (gameState.getState().compare("game")==0) {
 
-					//printf("flag1");
+					//render the current background
+					/*
+					
+					case gameState.getGameData().getLocation():
+					kitchen -> load kitchen
+					main room -> load main room
+					etc etc
+
+					*/
+
+
+					//render the current characters
+					/*
+
+					characters = getCharacters(date, time, location);
+					
+					up to 3 shown on screen
+
+					left, middle, right
+
+					if characters.length = 3
+
+					character1.load(left)
+					character2.load(middle)
+					character3.load(right)
+
+					if characters.length = 2
+
+					character1.load(left)
+					character2.load(right)
+
+					if characters.length = 1
+
+					charachert1.load(middle)
+
+					*/
+
+
+					//add dialogue on screen:
+
+					//display box on screen
+					
+					SDL_Rect rect;
+					rect.x = 250;
+					rect.y = 150;
+					rect.w = 200;
+					rect.h = 200;
+
+					SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+					SDL_RenderFillRect(renderer, &rect);
+
+					//get text to display
+					LTexture dialogueText = getText(0,0,"kitchen");
+
+					//display text
+					dialogueText.render( renderer, 0 , 0, 0);
+
+
 
 					//add buttons to screen
+					/*
+
+					add forward button
+					add save button
+					add options button
+
+
+					*/
+
+
 
 					//activate buttons
 
-					//add any applicable characters on screen
+					
 
-					//add dialogue on screen
+				}
 
+				if (gameState.getState().compare("choices")==0) {
+					//load choices
 				}
 				
 				if (gameState.getState().compare("loadSave")==0){
