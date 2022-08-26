@@ -17,7 +17,7 @@ class GameData {
         void setName(string newname);
         void setLocation(string newlocation);
         void setDate(string newdate);
-        void setTime(string newtime);
+        void setTime(float newtime);
         void setAffection(std::vector<std::string> newAffectionLevels);
         void setSwitches(std::vector<std::string>  newSwitches);
         void setInventory(std::vector<std::string> inventoryList);
@@ -25,11 +25,12 @@ class GameData {
         string getName();
         string getLocation();
         string getDate();
+        int getTime();
 
     private:
         string location;
         string date;
-        string time;
+        float time;
         string name;
         float* affectionLevels;
         Storage inventory;
@@ -78,6 +79,9 @@ class GameState {
 
         //change the inventory
         void setInventory(std::vector<std::string> items);
+
+        //increment the time
+        void incrementTime(string increment);
 
     private:
         string type;

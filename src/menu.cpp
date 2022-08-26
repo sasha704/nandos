@@ -311,6 +311,8 @@ LTexture getText(int date, int time, string location){
 	if(date==0){
 		if(time==0){
 			dialogueText = "this is example dialogue";
+		}else if(time==1){
+			dialogueText = "this is part 2";
 		}
 	}
 
@@ -371,10 +373,26 @@ int main( int argc, char* args[] ) {
 					//Handle button events
 					for( int i = 0; i < TOTAL_BUTTONS; ++i ) {
 						char* result = gButtons[ i ].handleEvent( &e, BUTTON_WIDTH, BUTTON_HEIGHT);
-
-						if(strcmp(result,"play")!=0){
+						string increment = "increment";
+						string stringResult(result);
+						if(strcmp(result,"play")!=0 && stringResult.rfind(increment, 0) != 0){
 							gameState.setState(result);
-							
+						}else if (stringResult.rfind("increment", 0) == 0){
+							//split the string by spaces
+
+							std::stringstream test (result);
+							std::string segment;
+							std::vector<std::string> seglist;
+
+							while(std::getline(test, segment, ' ')) {
+								seglist.push_back(segment);
+							}
+
+							//increment the time
+							gameState.incrementTime(seglist[1]);
+
+							std::cout << std::to_string(gameState.getGameData().getTime()) << "\n";
+
 						}
 					}
 				}
@@ -382,9 +400,6 @@ int main( int argc, char* args[] ) {
 				//Clear screen
 				SDL_SetRenderDrawColor( renderer, 0xFF, 0xFF, 0xFF, 0xFF );
 				SDL_RenderClear( renderer );
-
-				
-				
 
 				if (gameState.getState().compare("menu") == 0) {
 
@@ -482,7 +497,7 @@ int main( int argc, char* args[] ) {
 					SDL_RenderFillRect(renderer, &dialogueRect);
 
 					//get text to display
-					LTexture dialogueText = getText(0,0,"kitchen");
+					LTexture dialogueText = getText(0,gameState.getGameData().getTime(),"kitchen");
 
 					//display text
 					dialogueText.render( renderer, ((WINDOW_WIDTH-800)/2) , (WINDOW_HEIGHT-200), 0);
@@ -498,6 +513,13 @@ int main( int argc, char* args[] ) {
 
 
 					*/
+					//add forward button
+					gButtons[0].setID("NEXT");
+					gButtons[0].setPosition( WINDOW_WIDTH-BUTTON_WIDTH, WINDOW_HEIGHT - BUTTON_HEIGHT );
+					SDL_Point mPosition = gButtons[0].getPos();
+					buttonSpriteSheetTexture.render( renderer, mPosition.x, mPosition.y, 2, &gSpriteClips[ gButtons[0].getCurrentSprite()]);
+
+
 
 
 

@@ -98,6 +98,8 @@ char* LButton::handleEvent( SDL_Event* e, int BUTTON_WIDTH, int BUTTON_HEIGHT ) 
 					return "save2";
 				}else if (strcmp(buttonID,"SAVE3")==0){
 					return "save3";
+				}else if (strcmp(buttonID,"NEXT")==0){
+					return "increment 1";
 				}
 				
 				

@@ -31,7 +31,7 @@ GameData::GameData() {
     //initialise
     location = "outside";
     date = "0";
-    time = "0";
+    time = 0;
     name = "name";
     affectionLevels = new float[6] {0,0,0,0,0,0};
     inventory = Storage();
@@ -50,7 +50,7 @@ void GameData::setDate(string newdate){
     date = newdate;
 }
 
-void GameData::setTime(string newtime){
+void GameData::setTime(float newtime){
     time = newtime;
 }
 
@@ -80,6 +80,10 @@ string GameData::getLocation(){
 
 string GameData::getDate(){
     return date;
+}
+
+int GameData::getTime(){
+    return time;
 }
 
 
@@ -163,7 +167,7 @@ void GameState::setDate(string date){
 }
 
 void GameState::setTime(string time){
-    currentGameData.setTime(time);
+    currentGameData.setTime(std::stof(time));
 }
 
 void GameState::setAffection(std::vector<std::string> affection){
@@ -209,5 +213,9 @@ string GameState::gameStateToString(){
    
 
     return stringData;
+}
+
+void GameState::incrementTime(string increment){
+    currentGameData.setTime(currentGameData.getTime() + std::stof(increment));
 }
 
