@@ -209,9 +209,19 @@ void close() {
 
 
 //save a game to save1.txt
-void saveGame() {
+void saveGame(int file) {
+	string fileName = "../saves/save1.txt";
+
+	if(file==1){
+		fileName = "../saves/save1.txt";
+	}else if (file==2){
+		fileName = "../saves/save2.txt";
+	}else if( file==3){
+		fileName = "../saves/save3.txt";
+	}
+
 	// Create and open a text file
-	ofstream MyFile("../saves/save1.txt");
+	ofstream MyFile(fileName);
 
 	// Write to the file
 	MyFile << gameState.gameStateToString();
@@ -234,7 +244,9 @@ std::vector<std::string> splitList(string list){
 }
 
 //takes in a string and converts it to a gameState object
-void loadState(string saveData){
+GameState loadState(string saveData){
+
+	GameState tempState;
 
 	std::stringstream test (saveData);
 	std::string segment;
@@ -245,21 +257,24 @@ void loadState(string saveData){
 		seglist.push_back(segment);
 	}
 
-	gameState.setName(seglist[0]);
-	gameState.setLocation(seglist[1]);
-	gameState.setDate(seglist[2]);
-	gameState.setTime(seglist[3]);
-	gameState.setAffection(splitList(seglist[4]));
-	gameState.setSwitches(splitList(seglist[5]));
+	tempState.setName(seglist[0]);
+	tempState.setLocation(seglist[1]);
+	tempState.setDate(seglist[2]);
+	tempState.setTime(seglist[3]);
+	tempState.setAffection(splitList(seglist[4]));
+	tempState.setSwitches(splitList(seglist[5]));
 
-	gameState.setInventory(splitList(seglist[6]));
-	gameState.setState(seglist[7]);
-	gameState.setTypeData(splitList(seglist[8]));
+	tempState.setInventory(splitList(seglist[6]));
+	tempState.setState(seglist[7]);
+	tempState.setTypeData(splitList(seglist[8]));
+
+	return tempState;
 }
 
 //load the game in a specified save file
-void loadGame(int save) {
+GameState loadGame(int save) {
 	string saveData;
+	GameState tempState;
 	string fileName = "../saves/save1.txt";
 
 	if(save==2){
@@ -274,18 +289,20 @@ void loadGame(int save) {
 	// Use a while loop together with the getline() function to read the file line by line
 	while (getline (MyReadFile, saveData)) {
 		// Output the text from the file
-		loadState(saveData);
+		tempState = loadState(saveData);
 	}
 
 	// Close the file
 	MyReadFile.close();
+
+	return tempState;
 
 }
 
 LTexture getSaveData(int save){
 	LTexture savedata;
 	loadGame(save);
-	gameState.setState("load");
+	//gameState.setState("load");
 
 	string saveDataString = "Name: " + gameState.getGameData().getName() +" Location: "+gameState.getGameData().getLocation()+"Day: "+gameState.getGameData().getDate();
 
@@ -519,7 +536,11 @@ int main( int argc, char* args[] ) {
 					SDL_Point mPosition = gButtons[0].getPos();
 					buttonSpriteSheetTexture.render( renderer, mPosition.x, mPosition.y, 2, &gSpriteClips[ gButtons[0].getCurrentSprite()]);
 
-
+					//add a save button
+					gButtons[1].setID("SAVE");
+					gButtons[1].setPosition( 0, WINDOW_HEIGHT - BUTTON_HEIGHT );
+					mPosition = gButtons[1].getPos();
+					buttonSpriteSheetTexture.render( renderer, mPosition.x, mPosition.y, 2, &gSpriteClips[ gButtons[1].getCurrentSprite()]);
 
 
 
@@ -555,13 +576,13 @@ int main( int argc, char* args[] ) {
 
 					//set up save buttons
 					gButtons[0].setPosition( 0, 0 );
-					gButtons[0].setID("SAVE1");
+					gButtons[0].setID("LOAD1");
 					
 					gButtons[1].setPosition( 0, (WINDOW_HEIGHT/3) );
-					gButtons[1].setID("SAVE2");
+					gButtons[1].setID("LOAD2");
 
 					gButtons[2].setPosition( 0, WINDOW_HEIGHT - BUTTON_HEIGHT );
-					gButtons[2].setID("SAVE3");
+					gButtons[2].setID("LOAD3");
 
 
 					//Render buttons
@@ -618,12 +639,100 @@ int main( int argc, char* args[] ) {
 
 
 
-				}else if (gameState.getState().compare("save1")==0){
-					loadGame(1);
-				}else if (gameState.getState().compare("save1")==0){
-					loadGame(2);
-				}else if (gameState.getState().compare("save1")==0){
-					loadGame(3);
+				}else if (gameState.getState().compare("load1")==0){
+					gameState = loadGame(1);
+				}else if (gameState.getState().compare("load2")==0){
+					gameState = loadGame(2);
+				}else if (gameState.getState().compare("load3")==0){
+					gameState = loadGame(3);
+				}else if(gameState.getState().compare("save")==0){
+					printf("hehehhefhkajdhkah");
+					//show background
+					backgroundTexture.render( renderer, 0, 0, 1);
+
+					//show 3 rectangles
+
+					SDL_Rect saveRect;
+					saveRect.x = (WINDOW_WIDTH-800)/2;
+					saveRect.y = (WINDOW_HEIGHT-200);
+					saveRect.w = 800;
+					saveRect.h = 200;
+					SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+
+					SDL_RenderFillRect(renderer, &saveRect);
+					saveRect.y = (WINDOW_HEIGHT/3);
+					SDL_RenderFillRect(renderer, &saveRect);
+					saveRect.y = 0;
+					SDL_RenderFillRect(renderer, &saveRect);
+
+
+					//set up save buttons
+					gButtons[0].setPosition( 0, 0 );
+					gButtons[0].setID("SAVE1");
+					
+					gButtons[1].setPosition( 0, (WINDOW_HEIGHT/3) );
+					gButtons[1].setID("SAVE2");
+
+					gButtons[2].setPosition( 0, WINDOW_HEIGHT - BUTTON_HEIGHT );
+					gButtons[2].setID("SAVE3");
+
+
+					//Render buttons
+					for( int i = 0; i < TOTAL_BUTTONS; ++i ) {
+
+						SDL_Point mPosition = gButtons[i].getPos();
+
+						buttonSpriteSheetTexture.render( renderer, mPosition.x, mPosition.y, 2, &gSpriteClips[ gButtons[i].getCurrentSprite()]);
+					}
+
+
+					//get text for saves
+					LTexture savedata1 = getSaveData(1);
+					LTexture savedata2 = getSaveData(2);
+					LTexture savedata3 = getSaveData(3);
+
+					//display text
+					savedata1.render( renderer, ((WINDOW_WIDTH-800)/2) , 0, 0);
+					savedata2.render( renderer, ((WINDOW_WIDTH-800)/2) , (WINDOW_HEIGHT/3), 0);
+					savedata3.render( renderer, ((WINDOW_WIDTH-800)/2) , (WINDOW_HEIGHT-200), 0);
+
+					//render button text
+					//light
+					LTexture lightLoad;
+					SDL_Color textColorDark = { 0, 0, 0 };
+					SDL_Color textColorLight = { 255, 255, 255 };
+
+					if (! (lightLoad.loadFromRenderedText( renderer, gFont, "Save", textColorLight ))){
+						printf( "Failed to render text texture!\n" );
+					}
+
+					//dark
+					LTexture darkLoad;
+
+					if (! (darkLoad.loadFromRenderedText( renderer, gFont, "Save", textColorDark))){
+						printf( "Failed to render text texture!\n" );
+					}
+
+					//display text
+					
+
+					for( int i = 0; i < TOTAL_BUTTONS; ++i ) {
+
+						SDL_Point mPosition = gButtons[i].getPos();
+						if(gButtons[i].getCurrentSprite()==BUTTON_SPRITE_MOUSE_OUT){
+							darkLoad.render( renderer, mPosition.x, mPosition.y, 0);
+						}else{
+							lightLoad.render( renderer, mPosition.x, mPosition.y, 0);
+						}
+
+						
+					}
+				}else if(gameState.getState().compare("save1")==0){
+					saveGame(1);
+				}else if(gameState.getState().compare("save2")==0){
+					saveGame(2);
+				}else if(gameState.getState().compare("save3")==0){
+					saveGame(3);
 				}
 
 				//Update screen

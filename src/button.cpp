@@ -92,14 +92,22 @@ char* LButton::handleEvent( SDL_Event* e, int BUTTON_WIDTH, int BUTTON_HEIGHT ) 
 
 				}else if (strcmp(buttonID,"LOAD")==0){
 					return "load";
+				}else if (strcmp(buttonID,"LOAD1")==0){
+					return "load1";
+				}else if (strcmp(buttonID,"LOAD2")==0){
+					return "load2";
+				}else if (strcmp(buttonID,"LOAD3")==0){
+					return "load3";
+				}else if (strcmp(buttonID,"NEXT")==0){
+					return "increment 1";
+				}else if (strcmp(buttonID,"SAVE")==0){
+					return "save";
 				}else if (strcmp(buttonID,"SAVE1")==0){
 					return "save1";
 				}else if (strcmp(buttonID,"SAVE2")==0){
 					return "save2";
 				}else if (strcmp(buttonID,"SAVE3")==0){
 					return "save3";
-				}else if (strcmp(buttonID,"NEXT")==0){
-					return "increment 1";
 				}
 				
 				
