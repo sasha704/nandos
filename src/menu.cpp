@@ -58,19 +58,8 @@ LTexture backgroundTexture;
 
 //--------------CHARACTER SPRITES:--------------------------
 
-LTexture characters1;
-SDL_Rect charSprites1[ 3 ];
-
-LTexture mash;
-LTexture wrap;
-LTexture nata;
-
-LTexture characters2;
-SDL_Rect charSprites2[ 3 ];
-
-LTexture fgc;
-LTexture chips;
-LTexture yog;
+LTexture characters;
+SDL_Rect charSprites[ 6 ];
 
 //--------------BUTTON TEXT:--------------------------------
 
@@ -158,33 +147,46 @@ bool loadMedia() {
 			success = false;
 		}
 
-		if(!characters1.loadFromFile(renderer, "../images/characters1.png")){
-			printf("failed to load character sprites");
+		if(!characters.loadFromFile(renderer, "../images/characters.png")){
+			printf("failed to load neutral character sprites");
 			success = false;
 		}
 
-		if(!characters2.loadFromFile(renderer, "../images/characters2.png")){
-			printf("failed to load character sprites");
-			success = false;
-		}
+		//Set mash
+		charSprites[ 0 ].x =   0;
+		charSprites[ 0 ].y =   0;
+		charSprites[ 0 ].w = 512;
+		charSprites[ 0 ].h = 820;
+
+		//Set wrap
+		charSprites[ 1 ].x = 512;
+		charSprites[ 1 ].y =   0;
+		charSprites[ 1 ].w = 654;
+		charSprites[ 1 ].h = 820;
+		
+		//Set nata
+		charSprites[ 2 ].x = 1166;
+		charSprites[ 2 ].y = 0;
+		charSprites[ 2 ].w = 656;
+		charSprites[ 2 ].h = 820;
 
 		//Set fgc
-		charSprites2[ 0 ].x =   0;
-		charSprites2[ 0 ].y =   0;
-		charSprites2[ 0 ].w = 440;
-		charSprites2[ 0 ].h = 670;
+		charSprites[ 3 ].x = 1822;
+		charSprites[ 3 ].y =   0;
+		charSprites[ 3 ].w = 635;
+		charSprites[ 3 ].h = 820;
 
 		//Set chips
-		charSprites2[ 1 ].x = 440;
-		charSprites2[ 1 ].y =   0;
-		charSprites2[ 1 ].w = 350;
-		charSprites2[ 1 ].h = 670;
+		charSprites[ 4 ].x = 2457;
+		charSprites[ 4 ].y =   0;
+		charSprites[ 4 ].w = 454;
+		charSprites[ 4 ].h = 820;
 		
 		//Set yog
-		charSprites2[ 2 ].x = 790;
-		charSprites2[ 2 ].y = 0;
-		charSprites2[ 2 ].w = 438;
-		charSprites2[ 2 ].h = 670;
+		charSprites[ 5 ].x = 2911;
+		charSprites[ 5 ].y = 0;
+		charSprites[ 5 ].w = 570;
+		charSprites[ 5 ].h = 820;
 		
 		//Set sprites for buttons
 		for( int i = 0; i < BUTTON_SPRITE_TOTAL; ++i ) {
@@ -416,9 +418,9 @@ LTexture getText(int date, int time, string location){
 	//intro scene
 	if(date==0){
 		if(time==0){
-			dialogueText = "this is example dialogue";
+			dialogueText = "we saw you across the bar and we like your vibe";
 		}else if(time==1){
-			dialogueText = "this is part 2";
+			dialogueText = "did you know humans are naturally not monogamous";
 		}
 	}
 
@@ -595,9 +597,12 @@ int main( int argc, char* args[] ) {
 						*/
 
 						backgroundTexture.render( renderer, 0, 0, 1);
-						characters2.render( renderer, 200, 0, 0, &charSprites2[ 0 ]);
-						characters2.render( renderer, 300, 0, 0, &charSprites2[ 1 ]);
-						characters2.render( renderer, 500, 0, 0, &charSprites2[ 2 ]);
+						characters.render( renderer, 200, 0, 0, &charSprites[ 0 ]);
+						characters.render( renderer, 300, 0, 0, &charSprites[ 1 ]);
+						characters.render( renderer, 500, 0, 0, &charSprites[ 2 ]);
+						characters.render( renderer, 700, 0, 0, &charSprites[ 3 ]);
+						characters.render( renderer, 0, 0, 0, &charSprites[ 4 ]);
+						characters.render( renderer, 800, 0, 0, &charSprites[ 5 ]);
 
 
 						//add dialogue on screen:
@@ -608,7 +613,7 @@ int main( int argc, char* args[] ) {
 						dialogueRect.y = (WINDOW_HEIGHT-200);
 						dialogueRect.w = 800;
 						dialogueRect.h = 200;
-						SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+						SDL_SetRenderDrawColor(renderer, 220, 222, 164, 255);
 						SDL_RenderFillRect(renderer, &dialogueRect);
 
 						//get text to display
