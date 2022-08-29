@@ -56,6 +56,22 @@ LTexture buttonSpriteSheetTexture;
 //menu texture
 LTexture backgroundTexture;
 
+//--------------CHARACTER SPRITES:--------------------------
+
+LTexture characters1;
+SDL_Rect charSprites1[ 3 ];
+
+LTexture mash;
+LTexture wrap;
+LTexture nata;
+
+LTexture characters2;
+SDL_Rect charSprites2[ 3 ];
+
+LTexture fgc;
+LTexture chips;
+LTexture yog;
+
 //--------------BUTTON TEXT:--------------------------------
 
 //darktext
@@ -141,8 +157,36 @@ bool loadMedia() {
 			printf( "Failed to load background texture image!\n" );
 			success = false;
 		}
+
+		if(!characters1.loadFromFile(renderer, "../images/characters1.png")){
+			printf("failed to load character sprites");
+			success = false;
+		}
+
+		if(!characters2.loadFromFile(renderer, "../images/characters2.png")){
+			printf("failed to load character sprites");
+			success = false;
+		}
+
+		//Set fgc
+		charSprites2[ 0 ].x =   0;
+		charSprites2[ 0 ].y =   0;
+		charSprites2[ 0 ].w = 440;
+		charSprites2[ 0 ].h = 670;
+
+		//Set chips
+		charSprites2[ 1 ].x = 440;
+		charSprites2[ 1 ].y =   0;
+		charSprites2[ 1 ].w = 350;
+		charSprites2[ 1 ].h = 670;
 		
-		//Set sprites
+		//Set yog
+		charSprites2[ 2 ].x = 790;
+		charSprites2[ 2 ].y = 0;
+		charSprites2[ 2 ].w = 438;
+		charSprites2[ 2 ].h = 670;
+		
+		//Set sprites for buttons
 		for( int i = 0; i < BUTTON_SPRITE_TOTAL; ++i ) {
 			gSpriteClips[ i ].x = 0;
 			gSpriteClips[ i ].y = i * 885;
@@ -549,6 +593,11 @@ int main( int argc, char* args[] ) {
 						charachert1.load(middle)
 
 						*/
+
+						backgroundTexture.render( renderer, 0, 0, 1);
+						characters2.render( renderer, 200, 0, 0, &charSprites2[ 0 ]);
+						characters2.render( renderer, 300, 0, 0, &charSprites2[ 1 ]);
+						characters2.render( renderer, 500, 0, 0, &charSprites2[ 2 ]);
 
 
 						//add dialogue on screen:

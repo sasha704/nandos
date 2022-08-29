@@ -19,7 +19,7 @@ LButton::LButton() {
 		gSpriteClips[ i ].x = 0;
 		gSpriteClips[ i ].y = i * 1250;
 		gSpriteClips[ i ].w = 300;
-		gSpriteClips[ i ].h = 100;;
+		gSpriteClips[ i ].h = 100;
 	}
 }
 

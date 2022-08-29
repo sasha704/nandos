@@ -123,18 +123,19 @@ void LTexture::render( SDL_Renderer* renderer, int x, int y, int background, SDL
 	//Set rendering space and render to screen
 	SDL_Rect renderQuad = { x, y, mWidth, mHeight };
 
+
+	//Set clip rendering dimensions
+	if ( clip != NULL ) {
+		renderQuad.w = clip->w;
+		renderQuad.h = clip->h;
+	}
+
 	if (background==1){
 		renderQuad = { x, y, WINDOW_WIDTH, WINDOW_HEIGHT };
 	} else if (background == 2){
 		renderQuad = {x, y, 300, 100};
 	}
 	
-
-	//Set clip rendering dimensions
-	/*if ( clip != NULL ) {
-		renderQuad.w = clip->w;
-		renderQuad.h = clip->h;
-	}*/
 
 	//Render to screen
 	SDL_RenderCopyEx( renderer, mTexture, clip, &renderQuad, angle, center, flip );
