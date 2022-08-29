@@ -315,6 +315,52 @@ LTexture getSaveData(int save){
 	
 }
 
+LTexture getSaveDataName(int save){
+	LTexture savedata;
+	GameState loadedGame = loadGame(save);
+
+	string saveDataString = "Name: " + loadedGame.getGameData().getName();
+
+	//Render text
+	SDL_Color textColorLight = { 255, 255, 255 };
+	if (! (savedata.loadFromRenderedText( renderer, gFont, saveDataString, textColorLight ))){
+		printf( "Failed to render text texture!\n" );
+	}
+
+	return savedata;
+}
+
+LTexture getSaveDataLocation(int save){
+	LTexture savedata;
+	GameState loadedGame = loadGame(save);
+
+	string saveDataString = "Location: " + loadedGame.getGameData().getLocation();
+	
+	//Render text
+	SDL_Color textColorLight = { 255, 255, 255 };
+	if (! (savedata.loadFromRenderedText( renderer, gFont, saveDataString, textColorLight ))){
+		printf( "Failed to render text texture!\n" );
+	}
+
+	return savedata;
+}
+
+LTexture getSaveDataDate(int save){
+	LTexture savedata;
+	GameState loadedGame = loadGame(save);
+
+	string saveDataString = "Day: " + loadedGame.getGameData().getDate();
+	
+	//Render text
+	SDL_Color textColorLight = { 255, 255, 255 };
+	if (! (savedata.loadFromRenderedText( renderer, gFont, saveDataString, textColorLight ))){
+		printf( "Failed to render text texture!\n" );
+	}
+
+	return savedata;
+}
+
+
 //----------------PLOT CALCULATION METHODS:----------------------
 
 //return a texture of the text that should be on screen
@@ -545,9 +591,41 @@ int main( int argc, char* args[] ) {
 						mPosition = gButtons[1].getPos();
 						buttonSpriteSheetTexture.render( renderer, mPosition.x, mPosition.y, 2, &gSpriteClips[ gButtons[1].getCurrentSprite()]);
 
+						//add text to buttons
+						//Render text
+						SDL_Color textColorDark = { 0, 0, 0 };
+						SDL_Color textColorLight = { 255, 255, 255 };
+						
+						LTexture darkSave;
+						LTexture lightSave;
+						LTexture darkNext;
+						LTexture lightNext;
+
+						if (! (((darkSave.loadFromRenderedText( renderer, gFont, "Save", textColorDark )))&& (lightSave.loadFromRenderedText( renderer, gFont, "Save", textColorLight))&& (darkNext.loadFromRenderedText( renderer, gFont, "Next", textColorDark ))&& (lightNext.loadFromRenderedText( renderer, gFont, "Next", textColorLight )))){
+							printf( "Failed to render text texture!\n" );
+						}
+
+						//put text on next button
+						mPosition = gButtons[0].getPos();
+						if(gButtons[0].getCurrentSprite()==BUTTON_SPRITE_MOUSE_OUT){
+							darkNext.render( renderer, (mPosition.x+((BUTTON_WIDTH-darkNext.getWidth())/2)), (mPosition.y+((BUTTON_HEIGHT-darkNext.getHeight())/2)), 0);
+						}else{
+							lightNext.render( renderer, (mPosition.x+((BUTTON_WIDTH-lightNext.getWidth())/2)), (mPosition.y+((BUTTON_HEIGHT-lightNext.getHeight())/2)), 0);
+						}
+						
+
+						//put text on save button
+						mPosition = gButtons[1].getPos();
+						if(gButtons[1].getCurrentSprite()==BUTTON_SPRITE_MOUSE_OUT){
+							darkSave.render( renderer, (mPosition.x+((BUTTON_WIDTH-darkSave.getWidth())/2)), (mPosition.y+((BUTTON_HEIGHT-darkSave.getHeight())/2)), 0);
+						}else{
+							lightSave.render( renderer, (mPosition.x+((BUTTON_WIDTH-darkSave.getWidth())/2)), (mPosition.y+((BUTTON_HEIGHT-darkSave.getHeight())/2)), 0);
+						}
 
 
-						//activate buttons
+
+
+
 					}
 					
 
@@ -594,14 +672,30 @@ int main( int argc, char* args[] ) {
 
 
 					//get text for saves
-					LTexture savedata1 = getSaveData(1);
-					LTexture savedata2 = getSaveData(2);
-					LTexture savedata3 = getSaveData(3);
+					LTexture savedata1Name = getSaveDataName(1);
+					LTexture savedata1Location = getSaveDataLocation(1);
+					LTexture savedata1Date = getSaveDataDate(1);
+
+					LTexture savedata2Name = getSaveDataName(2);
+					LTexture savedata2Location = getSaveDataLocation(2);
+					LTexture savedata2Date = getSaveDataDate(2);
+
+					LTexture savedata3Name = getSaveDataName(3);
+					LTexture savedata3Location = getSaveDataLocation(3);
+					LTexture savedata3Date = getSaveDataDate(3);
 
 					//display text
-					savedata1.render( renderer, ((WINDOW_WIDTH-800)/2) , 0, 0);
-					savedata2.render( renderer, ((WINDOW_WIDTH-800)/2) , (WINDOW_HEIGHT/3), 0);
-					savedata3.render( renderer, ((WINDOW_WIDTH-800)/2) , (WINDOW_HEIGHT-200), 0);
+					savedata1Name.render( renderer, ((WINDOW_WIDTH-700)/2) , 0, 0);
+					savedata1Location.render( renderer, ((WINDOW_WIDTH-700)/2) , 70, 0);
+					savedata1Date.render( renderer, ((WINDOW_WIDTH-700)/2) , 140, 0);
+
+					savedata2Name.render( renderer, ((WINDOW_WIDTH-700)/2) , (WINDOW_HEIGHT/3), 0);
+					savedata2Location.render( renderer, ((WINDOW_WIDTH-700)/2) , ((WINDOW_HEIGHT/3)+70), 0);
+					savedata2Date.render( renderer, ((WINDOW_WIDTH-700)/2) , ((WINDOW_HEIGHT/3)+140), 0);
+
+					savedata3Name.render( renderer, ((WINDOW_WIDTH-700)/2) , (WINDOW_HEIGHT-200), 0);
+					savedata3Location.render( renderer, ((WINDOW_WIDTH-700)/2) , (WINDOW_HEIGHT-130), 0);
+					savedata3Date.render( renderer, ((WINDOW_WIDTH-700)/2) , (WINDOW_HEIGHT-60),0);
 
 					//render button text
 					//light
@@ -627,9 +721,9 @@ int main( int argc, char* args[] ) {
 
 						SDL_Point mPosition = gButtons[i].getPos();
 						if(gButtons[i].getCurrentSprite()==BUTTON_SPRITE_MOUSE_OUT){
-							darkLoad.render( renderer, mPosition.x, mPosition.y, 0);
+							darkLoad.render( renderer, (mPosition.x+((BUTTON_WIDTH-darkLoad.getWidth())/2)), (mPosition.y+((BUTTON_HEIGHT-darkLoad.getHeight())/2)), 0);
 						}else{
-							lightLoad.render( renderer, mPosition.x, mPosition.y, 0);
+							lightLoad.render( renderer, (mPosition.x+((BUTTON_WIDTH-darkLoad.getWidth())/2)), (mPosition.y+((BUTTON_HEIGHT-lightLoad.getHeight())/2)), 0);
 						}
 
 						
@@ -685,14 +779,30 @@ int main( int argc, char* args[] ) {
 
 
 					//get text for saves
-					LTexture savedata1 = getSaveData(1);
-					LTexture savedata2 = getSaveData(2);
-					LTexture savedata3 = getSaveData(3);
+					LTexture savedata1Name = getSaveDataName(1);
+					LTexture savedata1Location = getSaveDataLocation(1);
+					LTexture savedata1Date = getSaveDataDate(1);
+
+					LTexture savedata2Name = getSaveDataName(2);
+					LTexture savedata2Location = getSaveDataLocation(2);
+					LTexture savedata2Date = getSaveDataDate(2);
+
+					LTexture savedata3Name = getSaveDataName(3);
+					LTexture savedata3Location = getSaveDataLocation(3);
+					LTexture savedata3Date = getSaveDataDate(3);
 
 					//display text
-					savedata1.render( renderer, ((WINDOW_WIDTH-800)/2) , 0, 0);
-					savedata2.render( renderer, ((WINDOW_WIDTH-800)/2) , (WINDOW_HEIGHT/3), 0);
-					savedata3.render( renderer, ((WINDOW_WIDTH-800)/2) , (WINDOW_HEIGHT-200), 0);
+					savedata1Name.render( renderer, ((WINDOW_WIDTH-700)/2) , 0, 0);
+					savedata1Location.render( renderer, ((WINDOW_WIDTH-700)/2) , 70, 0);
+					savedata1Date.render( renderer, ((WINDOW_WIDTH-700)/2) , 140, 0);
+
+					savedata2Name.render( renderer, ((WINDOW_WIDTH-700)/2) , (WINDOW_HEIGHT/3), 0);
+					savedata2Location.render( renderer, ((WINDOW_WIDTH-700)/2) , ((WINDOW_HEIGHT/3)+70), 0);
+					savedata2Date.render( renderer, ((WINDOW_WIDTH-700)/2) , ((WINDOW_HEIGHT/3)+140), 0);
+
+					savedata3Name.render( renderer, ((WINDOW_WIDTH-700)/2) , (WINDOW_HEIGHT-200), 0);
+					savedata3Location.render( renderer, ((WINDOW_WIDTH-700)/2) , (WINDOW_HEIGHT-130), 0);
+					savedata3Date.render( renderer, ((WINDOW_WIDTH-700)/2) , (WINDOW_HEIGHT-60),0);
 
 					//render button text
 					//light
@@ -718,9 +828,9 @@ int main( int argc, char* args[] ) {
 
 						SDL_Point mPosition = gButtons[i].getPos();
 						if(gButtons[i].getCurrentSprite()==BUTTON_SPRITE_MOUSE_OUT){
-							darkLoad.render( renderer, mPosition.x, mPosition.y, 0);
+							darkLoad.render( renderer, (mPosition.x+((BUTTON_WIDTH-darkLoad.getWidth())/2)), (mPosition.y+((BUTTON_HEIGHT-darkLoad.getHeight())/2)), 0);
 						}else{
-							lightLoad.render( renderer, mPosition.x, mPosition.y, 0);
+							lightLoad.render( renderer, (mPosition.x+((BUTTON_WIDTH-darkLoad.getWidth())/2)), (mPosition.y+((BUTTON_HEIGHT-lightLoad.getHeight())/2)), 0);
 						}
 
 						
