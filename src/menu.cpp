@@ -8,7 +8,7 @@
 #include <string>
 #include <cmath>
 #include "button.hpp"
-#include "gameDataStructures.hpp"
+#include "gameState.hpp"
 #include <fstream>
 #include <string>
 #include <vector>

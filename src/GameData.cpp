@@ -1,32 +1,20 @@
+/*
+GameData structure holds information about the game data.
+*/
 #include <iostream>
 #include <string>
-#include "gameDataStructures.hpp"
+#include "GameData.hpp"
 using namespace std;
 using std::cout;
 using std::cin;
 using std::endl;
 using std::string;
 
+//GLOBAL VARIABLES
 int NO_OF_SWITCHES = 1;
 int NO_OF_DATES = 6;
 
-/* game state:
- - type of screen being shown (menu, choice, game, load/save)
-
- menu = ["menu", [gameData]]
- choice = ["choice", "choice text", [options], [gameData]]
- game = ["game", [gameData]] 
- load/save = ["loadSave", [gameData]]
-
- gameData = ["location", "date", "time", "name", [affection levels], [inventory], [switches]]
- (switches originally all set to false but can be changed via player choices)
- 
- */
-
-/* switch key:
-    0 - carrying key
-*/
-
+//-----------------------------------INITIALIZE:-------------------
 GameData::GameData() {
     //initialise
     location = "outside";
@@ -38,6 +26,7 @@ GameData::GameData() {
     switches = new int[1] {0};
 }
 
+//-----------------------------------SETTERS:----------------------
 void GameData::setName(string newname){
     name = newname;
 }
@@ -70,6 +59,7 @@ void GameData::setInventory(std::vector<std::string> inventoryList){
     inventory.setItems(inventoryList);
 }
 
+//------------------------------------GETTERS:----------------------
 string GameData::getName(){
     return name;
 }
@@ -86,7 +76,7 @@ int GameData::getTime(){
     return time;
 }
 
-
+//------------------CONVERSION TO STRING:---------------------------
 string convertSwitches(int switches[]){
     string stringSwitches = "";
 
@@ -131,104 +121,3 @@ string GameData::data2String(){
     return stringData;
 
 }
-
-
-
-
-
-
-GameState::GameState(){
-    //initialise
-    type = "menu";
-    currentGameData = GameData();
-}
-
-void GameState::updateGameData(GameData update){
-    currentGameData = update;
-}
-
-GameData GameState::getGameData(){
-    return currentGameData;
-}
-
-string GameState::getState(){
-    return type;
-}
-
-int GameState::getChoices(){
-    return choices;
-}
-
-void GameState::setState(string state){
-    type = state;
-}
-
-void GameState::setName(string name){
-    currentGameData.setName(name);
-}
-
-void GameState::setLocation(string location){
-    currentGameData.setLocation(location);
-}
-
-void GameState::setDate(string date){
-    currentGameData.setDate(date);
-}
-
-void GameState::setTime(string time){
-    currentGameData.setTime(std::stof(time));
-}
-
-void GameState::setAffection(std::vector<std::string> affection){
-    currentGameData.setAffection(affection);
-}
-
-void GameState::setSwitches(std::vector<std::string> switches){
-    currentGameData.setSwitches(switches);
-}
-
-void GameState::setInventory(std::vector<std::string> items){
-    currentGameData.setInventory(items);
-}
-
-void GameState::setChoices(int choice){
-    choices = choice;
-}
-
-string convertTypeData(string typeData[]){
-    string stringData = "";
-    
-    for(int i = 0; i < 3; i++){
-        stringData += typeData[i];
-        stringData += "-";
-    }
-
-    stringData += typeData[4];
-
-    return stringData;
-}
-
-void GameState::setTypeData(std::vector<std::string> newTypeData){
-    for (int i = 0; i < 4; i++){
-        typeData[i] = newTypeData[i];
-    }
-    
-}
-
-string GameState::gameStateToString(){
-    string stringData = "";
-
-    stringData += currentGameData.data2String();
-    stringData += ",";
-    stringData += type;
-    stringData += ",";
-    stringData += convertTypeData(typeData);
-   
-
-    return stringData;
-}
-
-void GameState::incrementTime(string increment){
-    currentGameData.setTime(currentGameData.getTime() + std::stof(increment));
-}
-
