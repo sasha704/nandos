@@ -302,7 +302,6 @@ GameState loadGame(int save) {
 LTexture getSaveData(int save){
 	LTexture savedata;
 	loadGame(save);
-	//gameState.setState("load");
 
 	string saveDataString = "Name: " + gameState.getGameData().getName() +" Location: "+gameState.getGameData().getLocation()+"Day: "+gameState.getGameData().getDate();
 
@@ -463,95 +462,95 @@ int main( int argc, char* args[] ) {
 				}
 
 				if (gameState.getState().compare("game")==0) {
+					if(gameState.getChoices()==1){
 
-					//render the current background
-					/*
-					
-					case gameState.getGameData().getLocation():
-					kitchen -> load kitchen
-					main room -> load main room
-					etc etc
-
-					*/
-
-
-					//render the current characters
-					/*
-
-					characters = getCharacters(date, time, location);
-					
-					up to 3 shown on screen
-
-					left, middle, right
-
-					if characters.length = 3
-
-					character1.load(left)
-					character2.load(middle)
-					character3.load(right)
-
-					if characters.length = 2
-
-					character1.load(left)
-					character2.load(right)
-
-					if characters.length = 1
-
-					charachert1.load(middle)
-
-					*/
-
-
-					//add dialogue on screen:
-
-					//display box on screen
-					SDL_Rect dialogueRect;
-					dialogueRect.x = (WINDOW_WIDTH-800)/2;
-					dialogueRect.y = (WINDOW_HEIGHT-200);
-					dialogueRect.w = 800;
-					dialogueRect.h = 200;
-					SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
-					SDL_RenderFillRect(renderer, &dialogueRect);
-
-					//get text to display
-					LTexture dialogueText = getText(0,gameState.getGameData().getTime(),"kitchen");
-
-					//display text
-					dialogueText.render( renderer, ((WINDOW_WIDTH-800)/2) , (WINDOW_HEIGHT-200), 0);
-
-
-
-					//add buttons to screen
-					/*
-
-					add forward button
-					add save button
-					add options button
-
-
-					*/
-					//add forward button
-					gButtons[0].setID("NEXT");
-					gButtons[0].setPosition( WINDOW_WIDTH-BUTTON_WIDTH, WINDOW_HEIGHT - BUTTON_HEIGHT );
-					SDL_Point mPosition = gButtons[0].getPos();
-					buttonSpriteSheetTexture.render( renderer, mPosition.x, mPosition.y, 2, &gSpriteClips[ gButtons[0].getCurrentSprite()]);
-
-					//add a save button
-					gButtons[1].setID("SAVE");
-					gButtons[1].setPosition( 0, WINDOW_HEIGHT - BUTTON_HEIGHT );
-					mPosition = gButtons[1].getPos();
-					buttonSpriteSheetTexture.render( renderer, mPosition.x, mPosition.y, 2, &gSpriteClips[ gButtons[1].getCurrentSprite()]);
-
-
-
-					//activate buttons
+					}else{
 
 					
+						//render the current background
+						/*
+						
+						case gameState.getGameData().getLocation():
+						kitchen -> load kitchen
+						main room -> load main room
+						etc etc
 
-				}
+						*/
 
-				else if (gameState.getState().compare("choices")==0) {
-					//load choices
+
+						//render the current characters
+						/*
+
+						characters = getCharacters(date, time, location);
+						
+						up to 3 shown on screen
+
+						left, middle, right
+
+						if characters.length = 3
+
+						character1.load(left)
+						character2.load(middle)
+						character3.load(right)
+
+						if characters.length = 2
+
+						character1.load(left)
+						character2.load(right)
+
+						if characters.length = 1
+
+						charachert1.load(middle)
+
+						*/
+
+
+						//add dialogue on screen:
+
+						//display box on screen
+						SDL_Rect dialogueRect;
+						dialogueRect.x = (WINDOW_WIDTH-800)/2;
+						dialogueRect.y = (WINDOW_HEIGHT-200);
+						dialogueRect.w = 800;
+						dialogueRect.h = 200;
+						SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+						SDL_RenderFillRect(renderer, &dialogueRect);
+
+						//get text to display
+						LTexture dialogueText = getText(0,gameState.getGameData().getTime(),"kitchen");
+
+						//display text
+						dialogueText.render( renderer, ((WINDOW_WIDTH-800)/2) , (WINDOW_HEIGHT-200), 0);
+
+
+
+						//add buttons to screen
+						/*
+
+						add forward button
+						add save button
+						add options button
+
+
+						*/
+						//add forward button
+						gButtons[0].setID("NEXT");
+						gButtons[0].setPosition( WINDOW_WIDTH-BUTTON_WIDTH, WINDOW_HEIGHT - BUTTON_HEIGHT );
+						SDL_Point mPosition = gButtons[0].getPos();
+						buttonSpriteSheetTexture.render( renderer, mPosition.x, mPosition.y, 2, &gSpriteClips[ gButtons[0].getCurrentSprite()]);
+
+						//add a save button
+						gButtons[1].setID("SAVE");
+						gButtons[1].setPosition( 0, WINDOW_HEIGHT - BUTTON_HEIGHT );
+						mPosition = gButtons[1].getPos();
+						buttonSpriteSheetTexture.render( renderer, mPosition.x, mPosition.y, 2, &gSpriteClips[ gButtons[1].getCurrentSprite()]);
+
+
+
+						//activate buttons
+					}
+					
+
 				}
 				
 				else if (gameState.getState().compare("load")==0){
@@ -646,7 +645,6 @@ int main( int argc, char* args[] ) {
 				}else if (gameState.getState().compare("load3")==0){
 					gameState = loadGame(3);
 				}else if(gameState.getState().compare("save")==0){
-					printf("hehehhefhkajdhkah");
 					//show background
 					backgroundTexture.render( renderer, 0, 0, 1);
 
@@ -728,11 +726,17 @@ int main( int argc, char* args[] ) {
 						
 					}
 				}else if(gameState.getState().compare("save1")==0){
+					gameState.setState("game");
 					saveGame(1);
+					loadGame(1);
 				}else if(gameState.getState().compare("save2")==0){
+					gameState.setState("game");
 					saveGame(2);
+					loadGame(2);
 				}else if(gameState.getState().compare("save3")==0){
+					gameState.setState("game");
 					saveGame(3);
+					loadGame(3);
 				}
 
 				//Update screen

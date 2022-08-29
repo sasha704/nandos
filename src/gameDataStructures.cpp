@@ -123,7 +123,7 @@ string GameData::data2String(){
     stringData += ",";
     stringData += date;
     stringData += ",";
-    stringData += time;
+    stringData += std::to_string(time);
     stringData += ",";
     stringData += convertAffection(affectionLevels);
     stringData += convertSwitches(switches);
@@ -131,6 +131,11 @@ string GameData::data2String(){
     return stringData;
 
 }
+
+
+
+
+
 
 GameState::GameState(){
     //initialise
@@ -148,6 +153,10 @@ GameData GameState::getGameData(){
 
 string GameState::getState(){
     return type;
+}
+
+int GameState::getChoices(){
+    return choices;
 }
 
 void GameState::setState(string state){
@@ -180,6 +189,10 @@ void GameState::setSwitches(std::vector<std::string> switches){
 
 void GameState::setInventory(std::vector<std::string> items){
     currentGameData.setInventory(items);
+}
+
+void GameState::setChoices(int choice){
+    choices = choice;
 }
 
 string convertTypeData(string typeData[]){

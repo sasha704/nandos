@@ -51,6 +51,9 @@ class GameState {
         //get the current state
         string getState();
 
+        //get the value of choices (1 or 0)
+        int getChoices();
+
         //change the state
         void setState(string state);
 
@@ -83,8 +86,12 @@ class GameState {
         //increment the time
         void incrementTime(string increment);
 
+        //set the choices
+        void setChoices(int choice);
+
     private:
         string type;
         string typeData [4];
         GameData currentGameData;
+        int choices;
 };
