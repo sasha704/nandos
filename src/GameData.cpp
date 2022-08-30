@@ -17,7 +17,7 @@ int NO_OF_DATES = 6;
 //-----------------------------------INITIALIZE:-------------------
 GameData::GameData() {
     //initialise
-    location = "outside";
+    location = "apartment";
     date = 0;
     time = 0;
     name = "name";
