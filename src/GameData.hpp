@@ -17,7 +17,7 @@ class GameData {
         //setters
         void setName(string newname);
         void setLocation(string newlocation);
-        void setDate(string newdate);
+        void setDate(int newdate);
         void setTime(float newtime);
         void setAffection(std::vector<std::string> newAffectionLevels);
         void setSwitches(std::vector<std::string>  newSwitches);
@@ -26,12 +26,12 @@ class GameData {
         //getters
         string getName();
         string getLocation();
-        string getDate();
+        int getDate();
         int getTime();
 
     private:
         string location;
-        string date;
+        float date;
         float time;
         string name;
         float* affectionLevels;

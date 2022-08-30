@@ -18,7 +18,7 @@ int NO_OF_DATES = 6;
 GameData::GameData() {
     //initialise
     location = "outside";
-    date = "0";
+    date = 0;
     time = 0;
     name = "name";
     affectionLevels = new float[6] {0,0,0,0,0,0};
@@ -35,7 +35,7 @@ void GameData::setLocation(string newlocation){
     location = newlocation;
 }
 
-void GameData::setDate(string newdate){
+void GameData::setDate(int newdate){
     date = newdate;
 }
 
@@ -68,7 +68,7 @@ string GameData::getLocation(){
     return location;
 }
 
-string GameData::getDate(){
+int GameData::getDate(){
     return date;
 }
 
@@ -111,7 +111,7 @@ string GameData::data2String(){
     stringData += ",";
     stringData += location;
     stringData += ",";
-    stringData += date;
+    stringData += std::to_string(date);
     stringData += ",";
     stringData += std::to_string(time);
     stringData += ",";

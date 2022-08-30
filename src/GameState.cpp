@@ -42,7 +42,7 @@ void GameState::setLocation(string location){
 }
 
 void GameState::setDate(string date){
-    currentGameData.setDate(date);
+    currentGameData.setDate(std::stof(date));
 }
 
 void GameState::setTime(string time){

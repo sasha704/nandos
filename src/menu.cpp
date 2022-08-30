@@ -60,6 +60,7 @@ LTexture backgroundTexture;
 
 LTexture characters;
 SDL_Rect charSprites[ 6 ];
+//mash, wrap, nata, fgc, chips, yog
 
 //--------------BUTTON TEXT:--------------------------------
 
@@ -349,7 +350,7 @@ LTexture getSaveData(int save){
 	LTexture savedata;
 	loadGame(save);
 
-	string saveDataString = "Name: " + gameState.getGameData().getName() +" Location: "+gameState.getGameData().getLocation()+"Day: "+gameState.getGameData().getDate();
+	string saveDataString = "Name: " + gameState.getGameData().getName() +" Location: "+gameState.getGameData().getLocation()+"Day: "+std::to_string(gameState.getGameData().getDate());
 
 	//Render text
 	SDL_Color textColorLight = { 255, 255, 255 };
@@ -443,6 +444,38 @@ LTexture getText(int date, int time, string location){
 	
 }
 
+//return a list of characters that appear in the current scene
+std::vector<int> getCharacters(int date, int time, string location){
+	//mash, wrap, nata, fgc, chips, yog
+	int mash = 0;
+	int wrap = 1;
+	int nata = 2;
+	int fgc = 3;
+	int chips = 4;
+	int yog = 5;
+
+	std::vector<int> characterList;
+
+	//intro scene
+	if(date==0){
+		if(time==0){
+			characterList.push_back(mash);
+		}else if(time==1){
+			characterList.push_back(mash);
+			characterList.push_back(wrap);
+		}
+	}
+
+	//day 1
+	if(date==1){
+		if(time==0){
+
+		}
+	}
+
+	return characterList;
+}
+
 //----------------MAIN GAME LOOP:-------------------------------
 
 int main( int argc, char* args[] ) {
@@ -486,8 +519,8 @@ int main( int argc, char* args[] ) {
 						if(strcmp(result,"play")!=0 && stringResult.rfind(increment, 0) != 0){
 							gameState.setState(result);
 						}else if (stringResult.rfind("increment", 0) == 0){
+							
 							//split the string by spaces
-
 							std::stringstream test (result);
 							std::string segment;
 							std::vector<std::string> seglist;
@@ -498,8 +531,6 @@ int main( int argc, char* args[] ) {
 
 							//increment the time
 							gameState.incrementTime(seglist[1]);
-
-							std::cout << std::to_string(gameState.getGameData().getTime()) << "\n";
 
 						}
 					}
@@ -554,55 +585,82 @@ int main( int argc, char* args[] ) {
 				}
 
 				if (gameState.getState().compare("game")==0) {
-					if(gameState.getChoices()==1){
-
-					}else{
-
 					
-						//render the current background
-						/*
-						
-						case gameState.getGameData().getLocation():
-						kitchen -> load kitchen
-						main room -> load main room
-						etc etc
+					//DISPLAY BACKGROUND:
 
-						*/
-
-
-						//render the current characters
-						/*
-
-						characters = getCharacters(date, time, location);
-						
-						up to 3 shown on screen
-
-						left, middle, right
-
-						if characters.length = 3
-
-						character1.load(left)
-						character2.load(middle)
-						character3.load(right)
-
-						if characters.length = 2
-
-						character1.load(left)
-						character2.load(right)
-
-						if characters.length = 1
-
-						charachert1.load(middle)
-
-						*/
-
+					if (gameState.getGameData().getLocation().compare("apartment") == 0){
+						//apartment.render( renderer, 0, 0, 1);
 						backgroundTexture.render( renderer, 0, 0, 1);
+					} else if (gameState.getGameData().getLocation().compare("inside") == 0){
+						//inside.render( renderer, 0, 0, 1);
+						backgroundTexture.render( renderer, 0, 0, 1);
+					} else if (gameState.getGameData().getLocation().compare("kitchen") == 0){
+						//kitchen.render( renderer, 0, 0, 1);
+						backgroundTexture.render( renderer, 0, 0, 1);
+					} else if (gameState.getGameData().getLocation().compare("bathroom") == 0){
+						//bathroom.render( renderer, 0, 0, 1);
+						backgroundTexture.render( renderer, 0, 0, 1);
+					} else if (gameState.getGameData().getLocation().compare("storage") == 0){
+						//storage.render( renderer, 0, 0, 1);
+						backgroundTexture.render( renderer, 0, 0, 1);
+					} else if (gameState.getGameData().getLocation().compare("office") == 0){
+						//office.render( renderer, 0, 0, 1);
+						backgroundTexture.render( renderer, 0, 0, 1);
+					} else if (gameState.getGameData().getLocation().compare("bins") == 0){
+						//bins.render( renderer, 0, 0, 1);
+						backgroundTexture.render( renderer, 0, 0, 1);
+					}
+
+					//DISPLAY CHARACTERS
+					
+					//get all the visible characters
+					std::vector<int> characterList = getCharacters(gameState.getGameData().getDate(), gameState.getGameData().getTime(), gameState.getGameData().getLocation());
+
+					//show on screen
+					if(characterList.size()==6){
 						characters.render( renderer, 200, 0, 0, &charSprites[ 0 ]);
 						characters.render( renderer, 300, 0, 0, &charSprites[ 1 ]);
 						characters.render( renderer, 500, 0, 0, &charSprites[ 2 ]);
 						characters.render( renderer, 700, 0, 0, &charSprites[ 3 ]);
-						characters.render( renderer, 0, 0, 0, &charSprites[ 4 ]);
+						characters.render( renderer,   0, 0, 0, &charSprites[ 4 ]);
 						characters.render( renderer, 800, 0, 0, &charSprites[ 5 ]);
+
+					}else if(characterList.size()==5){
+						characters.render( renderer, 200, 0, 0, &charSprites[ characterList[0] ]);
+						characters.render( renderer, 300, 0, 0, &charSprites[ characterList[1] ]);
+						characters.render( renderer, 500, 0, 0, &charSprites[ characterList[2] ]);
+						characters.render( renderer, 700, 0, 0, &charSprites[ characterList[3] ]);
+						characters.render( renderer,   0, 0, 0, &charSprites[ characterList[4] ]);
+
+					} else if(characterList.size()==4){
+						characters.render( renderer, 200, 0, 0, &charSprites[ characterList[0] ]);
+						characters.render( renderer, 300, 0, 0, &charSprites[ characterList[1] ]);
+						characters.render( renderer, 500, 0, 0, &charSprites[ characterList[2] ]);
+						characters.render( renderer, 700, 0, 0, &charSprites[ characterList[3] ]);
+						
+					} else if(characterList.size()==3){
+						characters.render( renderer, 200, 0, 0, &charSprites[ characterList[0] ]);
+						characters.render( renderer, 300, 0, 0, &charSprites[ characterList[1] ]);
+						characters.render( renderer, 500, 0, 0, &charSprites[ characterList[2] ]);
+						
+					} else if(characterList.size()==2){
+						characters.render( renderer, 200, 0, 0, &charSprites[ characterList[0] ]);
+						characters.render( renderer, 700, 0, 0, &charSprites[ characterList[1] ]);
+						
+					} else if(characterList.size()==1){
+						characters.render( renderer, 300, 0, 0, &charSprites[ characterList[0] ]);
+					}
+
+					
+
+					
+
+					
+					if(gameState.getChoices()==1){
+
+					}else{
+
+						
 
 
 						//add dialogue on screen:
@@ -624,15 +682,8 @@ int main( int argc, char* args[] ) {
 
 
 
-						//add buttons to screen
-						/*
-
-						add forward button
-						add save button
-						add options button
-
-
-						*/
+						//add buttons to screen:
+						
 						//add forward button
 						gButtons[0].setID("NEXT");
 						gButtons[0].setPosition( WINDOW_WIDTH-BUTTON_WIDTH, WINDOW_HEIGHT - BUTTON_HEIGHT );
