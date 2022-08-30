@@ -31,7 +31,7 @@ class GameData {
 
     private:
         string location;
-        float date;
+        int date;
         float time;
         string name;
         float* affectionLevels;

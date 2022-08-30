@@ -346,22 +346,6 @@ GameState loadGame(int save) {
 
 }
 
-LTexture getSaveData(int save){
-	LTexture savedata;
-	loadGame(save);
-
-	string saveDataString = "Name: " + gameState.getGameData().getName() +" Location: "+gameState.getGameData().getLocation()+"Day: "+std::to_string(gameState.getGameData().getDate());
-
-	//Render text
-	SDL_Color textColorLight = { 255, 255, 255 };
-	if (! (savedata.loadFromRenderedText( renderer, gFont, saveDataString, textColorLight ))){
-		printf( "Failed to render text texture!\n" );
-	}
-
-	return savedata;
-	
-}
-
 LTexture getSaveDataName(int save){
 	LTexture savedata;
 	GameState loadedGame = loadGame(save);
@@ -396,7 +380,7 @@ LTexture getSaveDataDate(int save){
 	LTexture savedata;
 	GameState loadedGame = loadGame(save);
 
-	string saveDataString = "Day: " + loadedGame.getGameData().getDate();
+	string saveDataString = "Day: " + std::to_string(loadedGame.getGameData().getDate());
 	
 	//Render text
 	SDL_Color textColorLight = { 255, 255, 255 };
